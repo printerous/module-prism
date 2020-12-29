@@ -2,11 +2,11 @@ module Prism
   class PrismModel < ActiveRecord::Base
     establish_connection(
       adapter: :postgresql,
-      host: ENV.fetch('PRISM_DBHOST'),
-      port: ENV.fetch('PRISM_DBPORT'),
-      username: ENV.fetch('PRISM_DBUSER'),
-      password: ENV.fetch('PRISM_DBPASS'),
-      database: ENV.fetch('PRISM_DBNAME')
+      host: ENV['PRISM_DBHOST'],
+      port: ENV['PRISM_DBPORT'],
+      username: ENV['PRISM_DBUSER'],
+      password: ENV['PRISM_DBPASS'],
+      database: ENV['PRISM_DBNAME']
     )
 
     self.abstract_class = true
