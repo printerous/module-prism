@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Prism
   class PrismModel < ActiveRecord::Base
     establish_connection(
