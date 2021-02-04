@@ -16,6 +16,7 @@ module Prism
 
     def partners
       selected_partner = Prism::PartnerFinder.new(variant_id, options).perform.first
+      return [] if selected_partner.blank?
 
       options.merge!(
         latitude: selected_partner.latitude,
@@ -25,7 +26,7 @@ module Prism
         exclude: selected_partner.id
       )
 
-      [selected_partner, Prism::PartnerFinder.new(variant_id, options).perform].flatten
+      [selected_partner, Prism::PartnerFinder.new(variant_id, options).perform].flatten.delete_if(&:blank?)
     end
 
     private
