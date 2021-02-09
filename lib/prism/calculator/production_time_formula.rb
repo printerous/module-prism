@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require File.dirname(__FILE__) + '/offset/time/time_formula.rb'
 
 module Prism
   class Calculator::ProductionTimeFormula < Prism::Calculator::Offset::Time::TimeFormula

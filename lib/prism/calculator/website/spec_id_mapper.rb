@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../website.rb'
+
 module Prism
   class Calculator::Website::SpecIdMapper
     attr_reader :spec_id, :calc_spec_id

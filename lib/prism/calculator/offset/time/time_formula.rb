@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../time.rb'
+
 module Prism
   class Calculator::Offset::Time::TimeFormula
     include ActionView::Helpers::NumberHelper
@@ -20,11 +22,11 @@ module Prism
     end
 
     def component
-      @component ||= Component.find_by code: self.class::COMPONENT_CODE
+      @component ||= Prism::Component.find_by code: self.class::COMPONENT_CODE
     end
 
     def partner_ratecard
-      @partner_ratecard ||= PartnerRatecard.joins(:component).find_by(partner_id: @partner.id, version: 'ALL', 'components.id': component.id)
+      @partner_ratecard ||= Prism::PartnerRatecard.joins(:component).find_by(partner_id: @partner.id, version: 'ALL', 'components.id': component.id)
     end
   end
 

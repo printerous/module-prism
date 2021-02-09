@@ -18,9 +18,9 @@ module Prism
     def insheet_print
       print_color = @print_color > 4 ? 4 : @print_color
       component = if @print_side == 2 && print_color > 0
-                    Component.where("properties -> 'printing_mode' ? :printing_mode", printing_mode: @printing_mode).first
+                    Prism::Component.where("properties -> 'printing_mode' ? :printing_mode", printing_mode: @printing_mode).first
                   else
-                    Component.where("properties ->> 'side' = :side", side: '1').first
+                    Prism::Component.where("properties ->> 'side' = :side", side: '1').first
                   end
 
       ratecard = component.partner_ratecard(@partner, "#{print_color}_warna")
@@ -34,21 +34,21 @@ module Prism
     end
 
     def insheet_finishing
-      finishing_spec_values = SpecValue.tagged_with(%w[LAMINATION FINISHING BINDING], any: true).collect(&:id)
+      finishing_spec_values = Prism::SpecValue.tagged_with(%w[LAMINATION FINISHING BINDING]).collect(&:id)
 
       spec_values = @product_spec.values.collect do |value|
         next if finishing_spec_values.exclude?(value.to_i)
 
-        SpecValue.find(value)
+        Prism::SpecValue.find(value)
       end.reject(&:blank?)
 
-      partner_ratecards = PartnerRatecard.joins(:component)
-                                         .where(partner_id: @partner.id)
-                                         .where('components.id IN (?)', spec_values.collect { |sv| sv.component&.id }.compact)
+      partner_ratecards = Prism::PartnerRatecard.joins(:component)
+                                                .where(partner_id: @partner.id)
+                                                .where('components.id IN (?)', spec_values.collect { |sv| sv.component&.id }.compact)
 
       partner_ratecards.sum do |partner_ratecard|
         component_code = partner_ratecard.component.properties['insheet_code']
-        finising_ratecard = Component.find_by(code: component_code).partner_ratecard(@partner, 'jumlah_insheet')
+        finising_ratecard = Prism::Component.find_by(code: component_code).partner_ratecard(@partner, 'jumlah_insheet')
         return 0 if finising_ratecard.blank?
 
         tier = finising_ratecard.tiers.by_quantity(@material_quantity)

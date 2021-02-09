@@ -80,9 +80,9 @@ module Prism
           total = 0
           # Material - Finishing
           @breakdowns.each do |breakdown|
-            formula = breakdown.formula.constantize
+            formula = breakdown.module_formula.constantize
             value   = formula.new(breakdown: breakdown, product: self, partner: partner, machine: machine, paper: paper).calculate
-            Rails.logger.info "---------------------- #{breakdown.formula} : #{partner.name}------------------"
+            Rails.logger.info "---------------------- #{breakdown.module_formula} : #{partner.name}------------------"
             Rails.logger.info "-------------------------- #{value} --------------------------"
 
             if value == -1

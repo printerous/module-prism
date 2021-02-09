@@ -5,7 +5,6 @@ module Prism
     acts_as_paranoid
 
     belongs_to :product_calculator
-    belongs_to :relation, polymorphic: true, optional: true
-    
+    belongs_to :relation, polymorphic: true, optional: true, foreign_type: :module_relation_type
   end
 end

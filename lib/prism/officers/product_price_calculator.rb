@@ -63,7 +63,7 @@ module Prism
     private
 
     def save_calculator_result(calculator, result)
-      cr = CalculatorResult.find_or_initialize_by(
+      cr = Prism::CalculatorResult.find_or_initialize_by(
         partner_id: result[:partner].id,
         calculator: calculator.class.to_s,
         spec_id: calculator._spec,

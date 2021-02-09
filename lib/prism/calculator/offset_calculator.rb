@@ -57,7 +57,7 @@ module Prism
           }
 
           fit_to_machines.each do |paper|
-            printing_mode = Calculator::PrintingModeOfficer.new(
+            printing_mode = Prism::Calculator::PrintingModeOfficer.new(
               gripper:      machine.properties['gripper'].to_f,
               paper_length: paper.length,
               paper_width:  paper.width,
@@ -73,7 +73,7 @@ module Prism
             next if printing_mode.impose_count.zero?
 
             material_quantity = (quantity / printing_mode.impose_count).ceil
-            waste_quantity = Calculator::InsheetFormula.new(
+            waste_quantity = Prism::Calculator::InsheetFormula.new(
               partner:            partner,
               print_side:         print_side,
               print_color:        print_color,
@@ -111,9 +111,9 @@ module Prism
 
             total = 0
             @breakdowns.each do |breakdown|
-              formula = breakdown.formula.constantize
+              formula = breakdown.module_formula.constantize
               value   = formula.new(breakdown: breakdown, product: self, partner: partner, machine: machine, paper: paper).calculate
-              Rails.logger.info "---------------------- #{breakdown.formula} : #{ partner.name }------------------"
+              Rails.logger.info "---------------------- #{breakdown.module_formula} : #{ partner.name }------------------"
               Rails.logger.info "-------------------------- #{value} --------------------------"
 
               if value == -1
@@ -129,7 +129,7 @@ module Prism
               total += value
             end
 
-            prodution_time_formula = Calculator::ProductionTimeFormula.new(
+            prodution_time_formula = Prism::Calculator::ProductionTimeFormula.new(
               product: self,
               partner: partner,
               machine: machine,

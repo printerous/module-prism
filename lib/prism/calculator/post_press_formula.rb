@@ -34,7 +34,7 @@ module Prism
     def tier
       @tier ||= begin
         ratecard_tiers = ratecard.partner_ratecard_tiers.order(:quantity_bottom)
-        tier = ratecard_tiers.by_quantity(@product.quantity) || ratecard_tiers.first
+        ratecard_tiers.by_quantity(@product.quantity) || ratecard_tiers.first
       end
     end
 

@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/pre_press_formula.rb'
+
 module Prism
   class Calculator::PlateCostFormula < Calculator::PrePressFormula
     COMPONENT_CODE = 'PLATE_COST'

@@ -40,7 +40,7 @@ module Prism
     def price_per_kg
       gsm =  @product.material.properties['gsm'].try(:to_f)
       plano = @paper.plano
-      Tools::ReamToKgPrice.new(material_tier.value, (plano.width/10), (plano.length/10), gsm).perform
+      KgToReamPriceOfficer.new(material_tier.value, (plano.width/10), (plano.length/10), gsm).perform
     end
 
     def waste_quantity

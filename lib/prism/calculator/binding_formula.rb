@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/post_press_formula.rb'
+
 module Prism
   class Calculator::BindingFormula < Calculator::PostPressFormula
     def price
