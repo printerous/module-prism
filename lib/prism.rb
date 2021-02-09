@@ -18,7 +18,6 @@ require File.dirname(__FILE__) + '/prism/calculator.rb'
 require File.dirname(__FILE__) + '/prism/calculator/website/spec_id_mapper.rb'
 
 Dir[File.dirname(__FILE__) + '/prism/calculator/offset/time/*'].sort.each do |file_name|
-  puts file_name
   require file_name if File.exist?(file_name)
 end
 
