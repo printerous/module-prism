@@ -4,7 +4,6 @@ require 'prism/version'
 require 'prism/rails'
 
 module Prism
-  VERSION = '0.1.1'
   class Error < StandardError; end
   # Your code goes here...
 end
