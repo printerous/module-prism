@@ -17,37 +17,37 @@ module Prism
         name: 'LaminationPreparationTime',
         dependencies: [],
         type: 'finishing',
-        spec_keys: SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
+        spec_keys: Prism::SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
       },
       {
         name: 'LaminationTime',
         dependencies: %w[PrintingTime LaminationPreparationTime],
         type: 'finishing',
-        spec_keys: SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
+        spec_keys: Prism::SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
       },
       {
         name: 'PondPreparationTime',
         dependencies: [],
         type: 'finishing',
-        spec_keys: SpecKey.where(code: ['cutting']).collect(&:id)
+        spec_keys: Prism::SpecKey.where(code: ['cutting']).collect(&:id)
       },
       {
         name: 'PondTime',
         dependencies: %w[PondPreparationTime PrintingTime LaminationTime],
         type: 'finishing',
-        spec_keys: SpecKey.where(code: ['cutting']).collect(&:id)
+        spec_keys: Prism::SpecKey.where(code: ['cutting']).collect(&:id)
       },
       {
         name: 'FoldingPreparationTime',
         dependencies: [],
         type: 'finishing',
-        spec_keys: SpecKey.where(code: ['folding']).collect(&:id)
+        spec_keys: Prism::SpecKey.where(code: ['folding']).collect(&:id)
       },
       {
         name: 'FoldingTime',
         dependencies: %w[PrintingTime FoldingPreparationTime PondTime LaminationTime],
         type: 'finishing',
-        spec_keys: SpecKey.where(code: ['folding']).collect(&:id)
+        spec_keys: Prism::SpecKey.where(code: ['folding']).collect(&:id)
       }
     ].freeze
 
