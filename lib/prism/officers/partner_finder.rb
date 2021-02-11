@@ -17,11 +17,11 @@ module Prism
     def partners
       selected_partner = Prism::PartnerFinder.new(variant_id, options).perform.first
       return [] if selected_partner.blank?
-      
+
       options.merge!(
         latitude: selected_partner.latitude,
         longitude: selected_partner.longitude,
-        priority: !selected_partner.priority,
+        priority: selected_partner.priority,
         distance: 25,
         exclude: selected_partner.id
       )
