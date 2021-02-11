@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require File.dirname(__FILE__) + '/offset/time/time_formula.rb'
 
 module Prism
@@ -8,52 +9,9 @@ module Prism
     @errors = []
     @results = []
 
-    DATA = [
-      {
-        name: 'PrintingTime',
-        dependencies: []
-      },
-      {
-        name: 'LaminationPreparationTime',
-        dependencies: [],
-        type: 'finishing',
-        spec_keys: Prism::SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
-      },
-      {
-        name: 'LaminationTime',
-        dependencies: %w[PrintingTime LaminationPreparationTime],
-        type: 'finishing',
-        spec_keys: Prism::SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
-      },
-      {
-        name: 'PondPreparationTime',
-        dependencies: [],
-        type: 'finishing',
-        spec_keys: Prism::SpecKey.where(code: ['cutting']).collect(&:id)
-      },
-      {
-        name: 'PondTime',
-        dependencies: %w[PondPreparationTime PrintingTime LaminationTime],
-        type: 'finishing',
-        spec_keys: Prism::SpecKey.where(code: ['cutting']).collect(&:id)
-      },
-      {
-        name: 'FoldingPreparationTime',
-        dependencies: [],
-        type: 'finishing',
-        spec_keys: Prism::SpecKey.where(code: ['folding']).collect(&:id)
-      },
-      {
-        name: 'FoldingTime',
-        dependencies: %w[PrintingTime FoldingPreparationTime PondTime LaminationTime],
-        type: 'finishing',
-        spec_keys: Prism::SpecKey.where(code: ['folding']).collect(&:id)
-      }
-    ].freeze
-
     def calculate
       total_time = []
-      self.class::DATA.each do |data|
+      time_formulas.each do |data|
         # Check is finishing exists on spec
         next if data[:type] == 'finishing' && (spec_keys & data[:spec_keys]).empty?
 
@@ -127,6 +85,53 @@ module Prism
       )
 
       formula
+    end
+
+    private
+
+    def time_formulas
+      @time_formulas ||= [
+        {
+          name: 'PrintingTime',
+          dependencies: []
+        },
+        {
+          name: 'LaminationPreparationTime',
+          dependencies: [],
+          type: 'finishing',
+          spec_keys: Prism::SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
+        },
+        {
+          name: 'LaminationTime',
+          dependencies: %w[PrintingTime LaminationPreparationTime],
+          type: 'finishing',
+          spec_keys: Prism::SpecKey.where(code: %w[lamination lamination_b]).collect(&:id)
+        },
+        {
+          name: 'PondPreparationTime',
+          dependencies: [],
+          type: 'finishing',
+          spec_keys: Prism::SpecKey.where(code: ['cutting']).collect(&:id)
+        },
+        {
+          name: 'PondTime',
+          dependencies: %w[PondPreparationTime PrintingTime LaminationTime],
+          type: 'finishing',
+          spec_keys: Prism::SpecKey.where(code: ['cutting']).collect(&:id)
+        },
+        {
+          name: 'FoldingPreparationTime',
+          dependencies: [],
+          type: 'finishing',
+          spec_keys: Prism::SpecKey.where(code: ['folding']).collect(&:id)
+        },
+        {
+          name: 'FoldingTime',
+          dependencies: %w[PrintingTime FoldingPreparationTime PondTime LaminationTime],
+          type: 'finishing',
+          spec_keys: Prism::SpecKey.where(code: ['folding']).collect(&:id)
+        }
+      ]
     end
   end
 end
