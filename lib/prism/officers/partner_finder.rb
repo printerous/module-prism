@@ -63,7 +63,7 @@ module Prism
 
     def subquery
       sql = <<~SQL
-        SELECT partners.*, partner_variants.priority, (6371 *
+        SELECT partners.*, partner_variants.priority, partner_ratings.score as rating, (6371 *
           ACOS(
             COS(RADIANS(#{latitude})) *
             COS(RADIANS(latitude)) *
@@ -75,7 +75,12 @@ module Prism
         ) AS distance
         FROM partners
           JOIN partner_product_types ON partners.id = partner_product_types.partner_id
+            AND partner_product_types.deleted_at IS NULL
           JOIN partner_variants ON partner_product_types.id = partner_variants.partner_product_type_id
+            AND partner_variants.deleted_at IS NULL
+          LEFT JOIN partner_ratings ON partners.id = partner_ratings.partner_id
+            AND partner_ratings.deleted_at is NULL
+            AND partner_ratings.period = 'alltime'
       SQL
 
       conditions = [true]
@@ -85,8 +90,6 @@ module Prism
       conditions << 'partners.longitude IS NOT NULL'
       conditions << 'partners.deleted_at IS NULL'
       conditions << "partners.status = #{Prism::Partner.statuses[:active]}"
-      conditions << 'partner_product_types.deleted_at IS NULL'
-      conditions << 'partner_variants.deleted_at IS NULL'
 
       conditions << "partner_variants.priority = #{options['priority']}" if options.key?('priority')
       conditions << "partners.id NOT IN (#{exclude.join(',')})" if exclude.present?
