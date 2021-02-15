@@ -17,7 +17,7 @@ module Prism
 
     def initialize(params)
       @paper_code      = 'a3320x450'
-      @params          = params
+      @params          = params.with_indifferent_access
       @product_type_id = params[:product_type_id]
       @quantity        = params[:quantity].to_f
       @partners        = Partner.where(id: [params[:partner_id]].flatten)

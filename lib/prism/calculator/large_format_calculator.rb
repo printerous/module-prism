@@ -16,7 +16,7 @@ module Prism
     # - size: { width: value, length: value } --> CUSTOM SIZE in mm
 
     def initialize(params)
-      @params          = params
+      @params          = params.with_indifferent_access
       @product_type_id = params[:product_type_id]
       @quantity        = params[:quantity].to_f
       @partners        = Partner.where(id: [params[:partner_id]].flatten)
@@ -47,15 +47,22 @@ module Prism
         end
 
         machines.each do |machine|
+          puts "======== #{machine.id} -------------"
           machine_width     = machine.properties['max_paper_width']
+          puts machine_width
           paper             = PrintingPaper.large_formats
                                            .where('width <= ?', machine_width)
                                            .where('width >= ?', print_width)
                                            .min_by(&:width)
 
+          puts "PAPER ID#{paper.id}"
           next if paper.blank?
 
+          puts "print_width #{print_width}"
+          puts "print_length #{print_length}"
           material_area     = (print_width * print_length / 1_000_000).round(2)
+
+          puts "====== MATERIAL AREIA#{material_area}"
           @prices << result = {
             partner: partner,
             partner_id: partner.id,

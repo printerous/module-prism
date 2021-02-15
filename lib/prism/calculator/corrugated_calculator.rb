@@ -16,7 +16,7 @@ module Prism
     # - box_size: { width: value, length: value, height: value } --> CUSTOM BOX SIZE in mm
 
     def initialize(params)
-      @params          = params
+      @params          = params.with_indifferent_access
       @product_type_id = params[:product_type_id]
       @quantity        = params[:quantity].to_f
       @partners        = Partner.where(id: [ params[:partner_id] ].flatten)
