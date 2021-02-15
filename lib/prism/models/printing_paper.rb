@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: printing_papers
+#
+#  id             :bigint(8)        not null, primary key
+#  code           :string
+#  name           :string
+#  width          :float
+#  length         :float
+#  deleted_at     :datetime
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  paper_base_id  :integer
+#  activated_at   :datetime
+#  deactivated_at :datetime
+#
+
+
 module Prism
   class PrintingPaper < PrismModel
     acts_as_paranoid

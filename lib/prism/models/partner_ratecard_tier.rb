@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: partner_ratecard_tiers
+#
+#  id                  :bigint(8)        not null, primary key
+#  partner_ratecard_id :bigint(8)
+#  partner_id          :bigint(8)
+#  quantity_bottom     :float            default(0.0)
+#  quantity_top        :float            default(0.0)
+#  price               :decimal(, )      default(0.0)
+#  unit                :jsonb
+#  deleted_at          :datetime
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  production_time     :float
+#  properties          :jsonb
+#  value               :decimal(12, 2)
+#
+
 module Prism
   class PartnerRatecardTier < PrismModel
     acts_as_paranoid
