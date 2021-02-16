@@ -15,9 +15,13 @@ module Prism
     end
 
     def partners
+      puts "PARAMS #{options}"
       selected_partner = Prism::PartnerFinder.new(variant_id, options).perform.first
       return [] if selected_partner.blank?
 
+      origin_latitude  = options[:latitude]
+      origin_longitude = options[:longitude]
+      puts "#{origin_latitude}, #{origin_longitude}"
       options.merge!(
         latitude: selected_partner.latitude,
         longitude: selected_partner.longitude,
@@ -26,7 +30,15 @@ module Prism
         exclude: selected_partner.id
       )
 
-      [selected_partner, Prism::PartnerFinder.new(variant_id, options).perform].flatten.delete_if(&:blank?)
+      nearest_partners = Prism::PartnerFinder.new(variant_id, options).perform
+      nearest_partners.each do |partner|
+        puts "======== partner #{partner.name}  =============="
+        puts "#{latitude}, #{longitude}"
+        distance = Geocoder::Calculations.distance_between([partner.latitude, partner.longitude], [origin_latitude, origin_longitude], { units: :km })
+        partner.distance = distance
+      end
+
+      [selected_partner, nearest_partners].flatten.delete_if(&:blank?)
     end
 
     private
