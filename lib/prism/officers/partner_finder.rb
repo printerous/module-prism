@@ -36,7 +36,7 @@ module Prism
     end
 
     def valid_location?
-      options[:latitude].present? && options[:longitude].presen?
+      latitude.present? && longitude.present?
     end
 
     def latitude
