@@ -1,5 +1,26 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: partner_ratecards
+#
+#  id                   :bigint(8)        not null, primary key
+#  partner_id           :bigint(8)
+#  partner_component_id :bigint(8)
+#  version              :string
+#  currency             :string
+#  unit                 :jsonb
+#  deleted_at           :datetime
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  active_at            :datetime
+#  inactive_at          :datetime
+#  price_minimum        :decimal(, )
+#  printing_type        :string
+#  properties           :jsonb
+#
+
+
 module Prism
   class PartnerRatecard < PrismModel
     acts_as_paranoid

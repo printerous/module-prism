@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: components
+#
+#  id          :bigint(8)        not null, primary key
+#  parent_id   :integer
+#  code        :string
+#  name        :string
+#  properties  :jsonb
+#  tags        :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  deleted_at  :datetime
+#  unit        :jsonb
+#  description :text
+#
+
+
 module Prism
   class Component < PrismModel
     acts_as_paranoid

@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: authentication_tokens
+#
+#  id            :bigint(8)        not null, primary key
+#  resource_type :string           not null
+#  resource_id   :string           not null
+#  token         :string           not null
+#  session_id    :string           not null
+#  ip_address    :string
+#  user_agent    :string
+#  active_at     :datetime
+#  inactive_at   :datetime
+#  deleted_at    :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 module Prism
   class AuthenticationToken < PrismModel
     acts_as_paranoid

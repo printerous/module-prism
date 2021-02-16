@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: spec_values
+#
+#  id                  :bigint(8)        not null, primary key
+#  code                :string
+#  name                :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  deleted_at          :datetime
+#  tags                :string
+#  properties          :jsonb
+#  deactivated_at      :datetime
+#  inquiry_items_count :integer          default(0)
+#  order_items_count   :integer          default(0)
+#
+
+
 module Prism
   class SpecValue < PrismModel
     acts_as_paranoid

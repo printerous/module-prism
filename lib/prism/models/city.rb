@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: cities
+#
+#  id          :bigint(8)        not null, primary key
+#  province_id :bigint(8)
+#  abbr        :string
+#  name        :string
+#  tags        :string
+#  deleted_at  :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  integration :jsonb
+#  latitude    :float            default(0.0)
+#  longitude   :float            default(0.0)
+#
+
+
 module Prism
   class City < PrismModel
     acts_as_paranoid

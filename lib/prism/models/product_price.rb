@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: product_prices
+#
+#  id           :bigint(8)        not null, primary key
+#  product_id   :bigint(8)
+#  source_type  :string
+#  source_id    :integer
+#  partner_id   :bigint(8)
+#  quantity     :float
+#  unit         :string
+#  price        :decimal(12, 2)
+#  working_day  :integer
+#  expired_at   :datetime
+#  deleted_at   :datetime
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  quantity_max :float
+#  weight       :integer          default(1)
+#  price_tag    :string
+#  references   :jsonb
+#
+
 module Prism
   class ProductPrice < PrismModel
     acts_as_paranoid

@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: products
+#
+#  id                  :bigint(8)        not null, primary key
+#  product_type_id     :bigint(8)
+#  code                :string
+#  name                :string
+#  spec                :jsonb
+#  deleted_at          :datetime
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  data                :jsonb
+#  tags                :string
+#  inquiry_items_count :integer
+#  standard_at         :datetime
+#
+
 module Prism
   class Product < PrismModel
     acts_as_paranoid
