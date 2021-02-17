@@ -31,8 +31,6 @@ module Prism
 
       nearest_partners = Prism::PartnerFinder.new(variant_id, options).perform
       nearest_partners.each do |partner|
-        puts "======== partner #{partner.name}  =============="
-        puts "#{latitude}, #{longitude}"
         distance = Geocoder::Calculations.distance_between(
           [partner.latitude, partner.longitude],
           [origin_latitude, origin_longitude],
