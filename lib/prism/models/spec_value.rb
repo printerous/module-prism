@@ -28,30 +28,8 @@ module Prism
 
     has_many :spec_components
 
-    def component_for(printing_type, **options)
-      sc = spec_components.by_rules(options)
-                          .find_by(printing_type: printing_type)
-      sc&.component
-    end
-
-    def active?
-      deactivated_at.blank?
-    end
-
-    def deactivate!(user)
-      update deactivated_at: Time.current, properties: { 'change_by': user.name }
-    end
-
-    def activate!(user)
-      update deactivated_at: nil, properties: { 'change_by': user.name }
-    end
-
     def self.custom_size
       find_by(code: 'CUSTOM_SIZE')
-    end
-
-    def direct?
-      properties['is_direct']
     end
 
     def self.tagged_with(text = [])
@@ -74,6 +52,32 @@ module Prism
       return [] if tagging_ids.blank?
 
       where(id: tagging_ids)
+    end
+
+    def component_for(printing_type, **options)
+      sc = spec_components.by_rules(options)
+                          .find_by(printing_type: printing_type)
+      sc&.component
+    end
+
+    def active?
+      deactivated_at.blank?
+    end
+
+    def deactivate!(user)
+      update deactivated_at: Time.current, properties: { 'change_by': user.name }
+    end
+
+    def activate!(user)
+      update deactivated_at: nil, properties: { 'change_by': user.name }
+    end
+
+    def direct?
+      properties['is_direct']
+    end
+
+    def custom_size?
+      return true if code.upcase == 'CUSTOM_SIZE' || id == 313
     end
   end
 end
