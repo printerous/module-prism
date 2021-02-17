@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     prism (0.1.0)
+      geocoder
 
 GEM
   remote: https://rubygems.org/
