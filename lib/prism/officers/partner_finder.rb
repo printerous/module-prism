@@ -6,7 +6,7 @@ module Prism
 
     def initialize(variant_id, args = {})
       @variant_id = variant_id
-      @options    = args.with_indifferent_access
+      @options    = args&.to_h&.with_indifferent_access
       @exclude    = [options[:exclude]].flatten.compact
     end
 
