@@ -31,11 +31,11 @@ module Prism
 
       nearest_partners = Prism::PartnerFinder.new(variant_id, options).perform
       nearest_partners.each do |partner|
-        distance = Prism::Geocoder::Calculations.distance_between(
+        distance = Prism::DistanceCalculator.new(
           [partner.latitude, partner.longitude],
           [origin_latitude, origin_longitude],
           { units: :km }
-        )
+        ).calculate
         partner.distance = distance
       end
 
