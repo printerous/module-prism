@@ -40,16 +40,6 @@
 #
 
 module Prism
-  class User < PrismModel
-    acts_as_paranoid
-
-    has_one :person_account
-    has_one :person, through: :person_account
-
-    def dob
-      return nil if birthdate.blank? || birthdate == '0000-00-00'
-
-      Date.strptime(birthdate, '%Y-%m-%d')
-    end
+  class UserCustomer < User
   end
 end

@@ -22,10 +22,9 @@
 #
 
 module Prism
-  class Organization < PrismModel
-    acts_as_paranoid
-
-    has_many :organization_members, dependent: :destroy
-    has_many :people, through: :organization_members
+  class Personal < Organization
+    def person
+      people.order(id: :asc).first
+    end
   end
 end
