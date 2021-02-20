@@ -20,6 +20,8 @@ module Prism
   class AuthenticationToken < PrismModel
     acts_as_paranoid
 
+    belongs_to :resource, polymorphic: true
+
     def self.actives
       now = Time.zone.now
 
