@@ -48,6 +48,8 @@ module Prism
 
     has_many :authentication_tokens, class_name: 'Prism::AuthenticationToken', as: :resource, dependent: :destroy
 
+    enum gender: %i[female male]
+
     def ensure_authentication_token
       return if authentication_token.present?
 
