@@ -61,8 +61,14 @@ module Prism
       end
     end
 
-    def api_token(session_id)
-      Prism::AuthenticationToken.where(resource_type: 'User', resource_id: id).actives.find_by(session_id: session_id)&.token
+    def generate_authentication_token!
+      self.authentication_token = generate_authentication_token
+      save!
+    end
+
+    def reset_authentication_token!
+      self.authentication_token = nil
+      save!
     end
 
     def dob
