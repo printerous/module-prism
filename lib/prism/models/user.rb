@@ -50,6 +50,8 @@ module Prism
 
     enum gender: %i[female male]
 
+    validates :name, presence: true
+
     def ensure_authentication_token
       return if authentication_token.present?
 
