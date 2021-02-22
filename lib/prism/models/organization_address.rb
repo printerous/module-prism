@@ -26,9 +26,6 @@ module Prism
   class OrganizationAddress < PrismModel
     acts_as_paranoid
 
-    attribute :latitude
-    attribute :longitude
-
     belongs_to :organization
     belongs_to :district, optional: true
 
@@ -48,6 +45,22 @@ module Prism
 
     def main?(user_id)
       main_addresses.find_by(user_id: user_id).persent?
+    end
+
+    def latitude
+      data['lat']
+    end
+
+    def longitude
+      data['long']
+    end
+
+    def latitude=(lat)
+      data['lat'] = lat
+    end
+
+    def longitude=(long)
+      data['long'] = long
     end
   end
 end
