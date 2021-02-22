@@ -48,10 +48,12 @@ module Prism
     has_one :personal, through: :person
 
     has_many :addresses, through: :personal, source: :organization_addresses
+    has_one  :main_address, dependent: :destroy
+    has_one  :default_address, through: :main_address, source: :organization_address
 
     has_many  :user_messaging_integrations, dependent: :destroy
     has_one   :slack_integration, -> { where(messaging_type: 'slack', revoked_at: nil) }, class_name: 'Prism::UserMessagingIntegration'
-    has_many :authentication_tokens, class_name: 'Prism::AuthenticationToken', as: :resource, dependent: :destroy
+    has_many  :authentication_tokens, class_name: 'Prism::AuthenticationToken', as: :resource, dependent: :destroy
 
     enum gender: %i[female male]
 

@@ -36,12 +36,18 @@ module Prism
     has_one :province, through: :city
     has_one :country, through: :province
 
+    has_many :main_addresses
+
     def full_address
       [street.gsub("\r\n", ' '), district&.name, city&.name, province&.name, zip_code].compact.join(', ')
     end
 
     def address
       [pic_name, full_address].compact.join(', ')
+    end
+
+    def main?(user_id)
+      main_addresses.find_by(user_id: user_id).persent?
     end
   end
 end
