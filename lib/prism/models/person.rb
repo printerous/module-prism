@@ -26,6 +26,7 @@ module Prism
 
     has_many :organization_members, foreign_key: :people_id, dependent: :destroy
     has_many :organizations, through: :organization_members
+    has_many :companines, through: :organization_members, source: :company
 
     has_one  :organization_member, foreign_key: :people_id
     has_one  :personal, through: :organization_member

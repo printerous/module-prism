@@ -44,7 +44,7 @@ module Prism
     end
 
     def main?(user_id)
-      main_addresses.find_by(user_id: user_id).persent?
+      main_addresses.find_by(user_id: user_id).present?
     end
 
     def latitude
