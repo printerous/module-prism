@@ -1,22 +1,23 @@
 # == Schema Information
 #
-# Table name: provinces
+# Table name: districts
 #
 #  id          :bigint(8)        not null, primary key
-#  country_id  :bigint(8)
-#  abbr        :string
 #  name        :string
-#  tags        :string
+#  city_id     :bigint(8)
 #  deleted_at  :datetime
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  integration :jsonb
+#  latitude    :float            default(0.0)
+#  longitude   :float            default(0.0)
+#  code        :string
 #
 
 module Prism
-  class Province < PrismModel
+  class District < PrismModel
     acts_as_paranoid
 
-    has_many :cities
+    belongs_to :city
   end
 end

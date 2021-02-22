@@ -27,5 +27,7 @@ module Prism
 
     has_many :organization_members, dependent: :destroy
     has_many :people, through: :organization_members
+
+    has_many :organization_addresses, dependent: :destroy
   end
 end

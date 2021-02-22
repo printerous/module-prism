@@ -45,6 +45,9 @@ module Prism
 
     has_one :person_account
     has_one :person, through: :person_account
+    has_one :personal, through: :person
+
+    has_many :addresses, through: :personal, source: :organization_addresses
 
     has_many  :user_messaging_integrations, dependent: :destroy
     has_one   :slack_integration, -> { where(messaging_type: 'slack', revoked_at: nil) }, class_name: 'Prism::UserMessagingIntegration'
