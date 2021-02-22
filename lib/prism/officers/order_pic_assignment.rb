@@ -6,16 +6,16 @@ module Prism
       'Moments Website' => { orders: { type: 'OrderMoment' }, order_items: { device_source: %w[mobile desktop] } },
       'Moments Apps' => { orders: { type: 'OrderMoment' }, order_items: { device_source: 'apps' } },
       'Panorama' => { orders: { type: 'OrderApiConnect', source: 'external-panorama' } },
-      'Offline Sales' => { orders: { type: 'OrderOfflineSales' } },
       'Pro Account' => { orders: { type: 'OrderProAccount' } },
       'Sweet Escape' => { orders: { type: 'OrderApiConnect', source: 'external-sweetescape' } },
       'Website Business Desktop' => { orders: { type: 'OrderWebsite' }, order_items: { device_source: 'desktop' } },
       'Website Business Mobile' => { orders: { type: 'OrderWebsite' }, order_items: { device_source: 'mobile' } },
+      'Inventory' => { orders: { type: 'OrderOfflineSales', category: 'inventory' } },
+      'Offline Sales' => { orders: { type: 'OrderOfflineSales' } },
+      'Tokopedia Connect' => { orders: { type: 'OrderApiConnect', source: 'external-tokopedia' } },
       'Internal Use' => { orders: { category: %w[internal_use internal-use] } },
       'Reprint' => { orders: { category: 'reprint' } },
       'Sample' => { orders: { category: 'sample' } },
-      'Inventory' => { orders: { category: 'inventory' } },
-      'Tokopedia Connect' => { orders: { type: 'OrderApiConnect', source: 'external-tokopedia' } }
     }.freeze
 
     def initialize(order_item_ids = [])
@@ -32,9 +32,13 @@ module Prism
         items.each do |order_item|
           mapping = business_line_mapping(order, order_item)
           source = mapping.first
+          puts "RESULT business_line_mapping: #{source}"
+
           next if source.blank?
 
           pic_order = Prism::OrderPicFinder.new(source, organization_id, sales_id).perform
+
+          puts pic_order
 
           next if pic_order.blank?
 
@@ -54,6 +58,14 @@ module Prism
       device_source  = order_item.device_source
       order_source   = order.source
       order_category = order.category
+
+      puts '------------------'
+      puts order_type
+      puts device_source
+      puts order_source
+      puts order_category
+      puts '------------------'
+
 
       BUSINESS_LINE_OPTIONS.detect do |source, conditions|
         results = []

@@ -18,12 +18,14 @@ module Prism
       # find by source
       pics = Prism::PicOrder.where(source: source)
 
-      if pics.size > 1
-        pics = pics.where(organization_id: organization_id)
-      end
+      pics = pics.where(organization_id: organization_id) if pics.size > 1
+
+      pics = pics.where(sales_id: sales_id) if pics.blank?
 
       if pics.blank?
-        pics = pics.where(sales_id: sales_id)
+        pics = Prism::PicOrder.where(source: source)
+                              .where(organization_id: nil)
+                              .where(sales_id.blank?)
       end
 
       pics.first
