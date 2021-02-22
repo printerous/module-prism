@@ -26,9 +26,6 @@ module Prism
     belongs_to :partner_variant
     belongs_to :user
 
-    mount_uploader :file, PrismPriceUploader
-    mount_uploader :agreement_file, PrismPriceUploader
-
     scope :active, -> { where('active_at IS NOT NULL AND active_at <= :now AND (inactive_at IS NULL OR inactive_at > :now)', now: Time.zone.now) }
 
     def variant
