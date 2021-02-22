@@ -46,11 +46,24 @@ module Prism
     has_one :person_account
     has_one :person, through: :person_account
 
+    has_many  :user_messaging_integrations, dependent: :destroy
+    has_one   :slack_integration, -> { where(messaging_type: 'slack', revoked_at: nil) }, class_name: 'Prism::UserMessagingIntegration'
+
     has_many :authentication_tokens, class_name: 'Prism::AuthenticationToken', as: :resource, dependent: :destroy
 
     enum gender: %i[female male]
 
     validates :name, presence: true
+
+    def slack_channel
+      slack_integration&.messaging_id
+    end
+
+    def slack_hook_url
+      return if slack_integration.blank?
+
+      slack_integration.data['hook_url']
+    end
 
     def ensure_authentication_token
       return if authentication_token.present?
