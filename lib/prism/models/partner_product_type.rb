@@ -15,5 +15,8 @@
 module Prism
   class PartnerProductType < PrismModel
     acts_as_paranoid
+
+    belongs_to :partner
+    has_many :partner_variants, dependent: :destroy
   end
 end

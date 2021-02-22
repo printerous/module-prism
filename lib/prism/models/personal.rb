@@ -21,13 +21,12 @@
 #  is_pro             :integer
 #
 
+require File.dirname(__FILE__) + '/organization.rb'
+
 module Prism
-  class Organization < PrismModel
-    acts_as_paranoid
-
-    has_many :organization_members, dependent: :destroy
-    has_many :people, through: :organization_members
-
-    has_many :organization_addresses, dependent: :destroy
+  class Personal < Organization
+    def person
+      people.order(id: :asc).first
+    end
   end
 end

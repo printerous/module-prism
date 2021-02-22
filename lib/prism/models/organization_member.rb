@@ -21,6 +21,10 @@ module Prism
   class OrganizationMember < PrismModel
     acts_as_paranoid
 
+    belongs_to :person, -> { with_deleted }, foreign_key: :people_id
+
+    belongs_to :personal, foreign_key: :organization_id
     belongs_to :organization, -> { with_deleted }
+    belongs_to :company, -> { with_deleted }, foreign_key: :organization_id
   end
 end

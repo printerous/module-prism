@@ -1,12 +1,10 @@
 # == Schema Information
 #
-# Table name: provinces
+# Table name: countries
 #
 #  id          :bigint(8)        not null, primary key
-#  country_id  :bigint(8)
 #  abbr        :string
 #  name        :string
-#  tags        :string
 #  deleted_at  :datetime
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -14,9 +12,9 @@
 #
 
 module Prism
-  class Province < PrismModel
+  class Country < PrismModel
     acts_as_paranoid
 
-    has_many :cities
+    has_many :provinces
   end
 end

@@ -17,12 +17,12 @@
 #  longitude   :float            default(0.0)
 #
 
-
 module Prism
   class City < PrismModel
     acts_as_paranoid
 
     belongs_to :province
+    has_many   :districts
 
     scope :by_city, lambda { |query|
       return where(nil) if query.blank?
