@@ -49,6 +49,9 @@ module Prism
   class Partner < PrismModel
     acts_as_paranoid
 
+    belongs_to :city
+    belongs_to :province
+
     has_many :partner_machines
     has_many :printing_machines, through: :partner_machines
 
@@ -59,7 +62,18 @@ module Prism
     has_one  :current_mtd, -> { where(period: 'mtd').where(end_date: Date.yesterday) }, class_name: 'PartnerRating'
     has_many :three_months_before, -> { where(period: 'monthly').where(name: (1..3).to_a.map { |i| (Date.today - i.month).strftime('%b %Y') }).order(created_at: 'desc') }, class_name: 'PartnerRating'
 
+    has_many :partner_product_variants
+    has_many :partner_product_types
+    has_many :partner_variants, through: :partner_product_types
 
     enum status: %i[active inactive banned]
+
+    scope :active, lambda {
+      where(status: :active)
+    }
+
+    def self.options
+      all.collect { |p| [p.name, p.id] }
+    end
   end
 end
