@@ -18,8 +18,8 @@ module Prism
       selected_partner = Prism::PartnerFinder.new(variant_id, options).perform.first
       return [] if selected_partner.blank?
 
-      origin_latitude  = options[:latitude]
-      origin_longitude = options[:longitude]
+      origin_latitude  = options[:latitude].to_f
+      origin_longitude = options[:longitude].to_f
 
       options.merge!(
         latitude: selected_partner.latitude,
