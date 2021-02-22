@@ -45,5 +45,13 @@ module Prism
         .where(source_id: inquiry_item_price.source_id)
         .first
     end
+
+    def self.by_references(model, id)
+      where('"references" @> ?', [{ id: id, type: model }].to_json)
+    end
+
+    def source_calculator?
+      source_type == 'CalculatorResult'
+    end
   end
 end

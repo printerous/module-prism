@@ -21,6 +21,8 @@
 
 module Prism
   class CalculatorResult < PrismModel
+    acts_as_paranoid
+
     VARIANT_METHOD = {
       'Calculator::DigitalCalculator' => 'digital_calculator',
       'Calculator::LargeFormatCalculator' => 'large_format_calculator',
@@ -28,8 +30,6 @@ module Prism
       'Calculator::OffsetCalculator' => 'offset_calculator',
       'Calculator::CorrugatedCalculator' => 'corrugated_calculator'
     }.freeze
-
-    acts_as_paranoid
 
     belongs_to :partner
   end
