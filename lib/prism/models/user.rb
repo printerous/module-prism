@@ -51,7 +51,6 @@ module Prism
 
     has_many  :user_messaging_integrations, dependent: :destroy
     has_one   :slack_integration, -> { where(messaging_type: 'slack', revoked_at: nil) }, class_name: 'Prism::UserMessagingIntegration'
-
     has_many :authentication_tokens, class_name: 'Prism::AuthenticationToken', as: :resource, dependent: :destroy
 
     enum gender: %i[female male]

@@ -35,5 +35,13 @@ module Prism
     has_one :city, through: :district
     has_one :province, through: :city
     has_one :country, through: :province
+
+    def full_address
+      [street.gsub("\r\n", ' '), district&.name, city&.name, province&.name, zip_code].compact.join(', ')
+    end
+
+    def address
+      [pic_name, full_address].compact.join(', ')
+    end
   end
 end
