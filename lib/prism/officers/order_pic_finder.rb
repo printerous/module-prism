@@ -25,7 +25,7 @@ module Prism
       if pics.blank?
         pics = Prism::PicOrder.where(source: source)
                               .where(organization_id: nil)
-                              .where(sales_id.blank?)
+                              .where(sales_id: nil)
       end
 
       pics.first
