@@ -31,6 +31,8 @@ module Prism
 
         items.each do |order_item|
           mapping = business_line_mapping(order, order_item)
+          next if mapping.blank?
+
           source = mapping.first
           puts "RESULT business_line_mapping: #{source}"
 
