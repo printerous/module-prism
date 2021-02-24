@@ -19,7 +19,7 @@ module Prism
     private
 
     def endpoint
-      "#{ENV.fetch('WEBSITE_HOST_URL')}/api/mailing/#{notification_slug}"
+      "#{ENV.fetch('CMS_HOST_URL')}/api/mailing/#{notification_slug}"
     end
 
     def data
