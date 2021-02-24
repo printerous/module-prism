@@ -120,5 +120,15 @@ module Prism
         updated_at: updated_at
       }
     end
+
+    def send_devise_notification(notification, *args)
+      # devise_mailer.send(notification, self, *args).deliver_later
+      # Call API Email
+      Prism::EmailingOfficer.new(self, notification).perform
+    end
+
+    def send_welcome_notification
+      Prism::EmailingOfficer.new(self, :welcome).perform
+    end
   end
 end
