@@ -18,5 +18,19 @@ module Prism
     acts_as_paranoid
 
     has_many :cities
+
+    scope :by_query, lambda { |query|
+      return where(nil) if query.blank?
+
+      query = ActiveRecord::Base.connection.quote_string(query.strip)
+      where("provinces.name % :query", query: query, code: "%#{query}%")
+        .order(Arel.sql("similarity(provinces.name, '#{query}') DESC"))
+    }
+
+    def self.search(params = {})
+      params = {} if params.blank?
+      
+      by_query(params[:query])
+    end
   end
 end

@@ -43,6 +43,19 @@ module Prism
       )
     }
 
+    scope :by_province_id, lambda { |province_id|
+      return where(nil) if province_id.blank?
+
+      where(province_id: province_id)
+    }
+
+    def self.search(params = {})
+      params = {} if params.blank?
+      
+      by_city(params[:query])
+        .by_province_id(params[:province_id])
+    end
+
     def destination_name
       destination = province&.name.to_s
       destination = "#{destination}, #{city&.name}" unless city.blank?

@@ -19,5 +19,27 @@ module Prism
     acts_as_paranoid
 
     belongs_to :city
+
+    scope :by_query, lambda { |query|
+      return where(nil) if query.blank?
+
+      query = ActiveRecord::Base.connection.quote_string(query.strip)
+      where("districts.name % :query OR REGEXP_REPLACE(districts.code, '\s', '', 'g') ILIKE :code", query: query, code: "%#{query}%")
+        .order(Arel.sql("similarity(districts.name, '#{query}') DESC"))
+        .order(Arel.sql("similarity(districts.code, '#{query}') DESC"))
+    }
+
+    scope :by_city_id, lambda { |city_id|
+      return where(nil) if city_id.blank?
+
+      where(city_id: city_id)
+    }
+
+    def self.search(params = {})
+      params = {} if params.blank?
+      
+      by_query(params[:query])
+        .by_city_id(params[:city_id])
+    end
   end
 end
