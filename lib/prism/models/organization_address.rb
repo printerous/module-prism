@@ -67,11 +67,16 @@ module Prism
       return where(nil) if query.blank?
 
       eager_load(:district, :city, :province)
-        .where(
-          'organization_addresses.label ILIKE :query OR organization_addresses.street ILIKE :query OR organization_addresses.pic_email ILIKE :query OR
-           organization_addresses.pic_name ILIKE :query OR organization_addresses.pic_phone ILIKE :query OR organization_addresses.office_phone ILIKE :query OR districts.name ILIKE :query OR cities.name ILIKE :query OR provinces.name ILIKE :query',
-          query: "%#{query}%"
-        )
+        .where("organization_addresses.label % :query OR organization_addresses.street % :query OR
+          organization_addresses.pic_email ILIKE :query OR
+          organization_addresses.pic_name ILIKE :query OR
+          organization_addresses.pic_phone ILIKE :query OR
+          organization_addresses.office_phone ILIKE :query OR
+          districts.name ILIKE :query OR
+          cities.name ILIKE :query OR
+          provinces.name ILIKE :query", query: query, code: "%#{query}%")  
+        .order(Arel.sql("similarity(organization_addresses.label, '#{query}') DESC"))
+        .order(Arel.sql("similarity(organization_addresses.street, '#{query}') DESC"))
     }
 
     def self.search(params = {})

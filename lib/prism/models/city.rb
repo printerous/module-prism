@@ -27,10 +27,9 @@ module Prism
     scope :by_city, lambda { |query|
       return where(nil) if query.blank?
 
-      where(
-        'cities.name ILIKE :query OR cities.abbr ILIKE :query',
-        query: "%#{query}%"
-      )
+      query = ActiveRecord::Base.connection.quote_string(query.strip)
+      where("cities.name % :query", query: query, code: "%#{query}%")
+        .order(Arel.sql("similarity(cities.name, '#{query}') DESC"))
     }
 
     scope :by_query, lambda { |query|
@@ -51,7 +50,6 @@ module Prism
 
     def self.search(params = {})
       params = {} if params.blank?
-      
       by_city(params[:query])
         .by_province_id(params[:province_id])
     end

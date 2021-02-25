@@ -7,12 +7,15 @@ module Prism
     scope :by_query, lambda { |query|
       return where(nil) if query.blank?
 
-      where(
-        'zipcode ILIKE :query OR sub_district_name ILIKE :query OR
-        district_name ILIKE :query OR city_name ILIKE :query OR
-        province_name ILIKE :query',
-        query: "%#{query}%"
-      )
+      query = ActiveRecord::Base.connection.quote_string(query.strip)
+      where("zipcodes.zipcode % :query OR zipcodes.sub_district_name % :query OR
+         zipcodes.district_name % :query OR zipcodes.city_name % :query OR
+         zipcodes.province_name % :query", query: query, code: "%#{query}%")
+        .order(Arel.sql("similarity(zipcodes.zipcode, '#{query}') DESC"))
+        .order(Arel.sql("similarity(zipcodes.sub_district_name, '#{query}') DESC"))
+        .order(Arel.sql("similarity(zipcodes.district_name, '#{query}') DESC"))
+        .order(Arel.sql("similarity(zipcodes.city_name, '#{query}') DESC"))
+        .order(Arel.sql("similarity(zipcodes.province_name, '#{query}') DESC"))
     }
 
     def self.search(params = {})
