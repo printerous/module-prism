@@ -62,5 +62,21 @@ module Prism
     def longitude=(long)
       data['long'] = long
     end
+
+    scope :by_query, lambda { |query|
+      return where(nil) if query.blank?
+
+      eager_load(:district, :city, :province)
+        .where(
+          'organization_addresses.label ILIKE :query OR organization_addresses.street ILIKE :query OR organization_addresses.pic_email ILIKE :query OR
+           organization_addresses.pic_name ILIKE :query OR organization_addresses.pic_phone ILIKE :query OR organization_addresses.office_phone ILIKE :query OR districts.name ILIKE :query OR cities.name ILIKE :query OR provinces.name ILIKE :query',
+          query: "%#{query}%"
+        )
+    }
+
+    def self.search(params = {})
+      params = {} if params.blank?
+      by_query(params[:query])
+    end
   end
 end
