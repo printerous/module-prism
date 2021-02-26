@@ -74,14 +74,21 @@ module Prism
           organization_addresses.office_phone ILIKE :query OR
           districts.name ILIKE :query OR
           cities.name ILIKE :query OR
-          provinces.name ILIKE :query", query: query, code: "%#{query}%")  
+          provinces.name ILIKE :query", query: query, code: "%#{query}%")
         .order(Arel.sql("similarity(organization_addresses.label, '#{query}') DESC"))
         .order(Arel.sql("similarity(organization_addresses.street, '#{query}') DESC"))
+    }
+
+    scope :by_district_id, lambda { |district_id|
+      return where(nil) if district_id.blank?
+
+      where('organization_addresses.district_id = ?', district_id)
     }
 
     def self.search(params = {})
       params = {} if params.blank?
       by_query(params[:query])
+        .by_district_id(params[:district_id])
     end
   end
 end
