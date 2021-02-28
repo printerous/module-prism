@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: zipcodes
+#
+#  id                :bigint(8)        not null, primary key
+#  district_id       :bigint(8)
+#  zipcode           :string
+#  sub_district_name :string
+#  district_name     :string
+#  city_name         :string
+#  province_name     :string
+#  deleted_at        :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
 module Prism
   class Zipcode < PrismModel
     acts_as_paranoid
