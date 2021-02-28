@@ -36,7 +36,7 @@ module Prism
     has_many :main_addresses
 
     def full_address
-      [street.gsub("\r\n", ' '), district&.name, city&.name, province&.name, zip_code].compact.join(', ')
+      [street&.gsub("\r\n", ' '), district&.name, city&.name, province&.name, zip_code].compact.join(', ')
     end
 
     def address
