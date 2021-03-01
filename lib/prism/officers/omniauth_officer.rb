@@ -26,7 +26,8 @@ module Prism
       end
 
       social_account.user_id   = @user.id # Reconnect
-      social_account.email     = @user.email
+      social_account.email     = registration_params[:email]
+      social_account.name      = params[:name]
       social_account.connected = true
       social_account.save!
     rescue StandardError => e
