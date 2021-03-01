@@ -60,6 +60,10 @@ module Prism
     has_many  :authentication_tokens, class_name: 'Prism::AuthenticationToken', as: :resource, dependent: :destroy
     has_many  :social_accounts, dependent: :destroy
 
+    # Stark Module Dependencies
+    has_many :user_carts, class_name: 'Stark::Cart', dependent: :destroy
+    has_one  :active_user_cart, -> { where(checkout_at: nil).order(created_at: :desc) }, class_name: 'Stark::Cart'
+
     enum gender: %i[female male]
 
     validates :name, presence: true
