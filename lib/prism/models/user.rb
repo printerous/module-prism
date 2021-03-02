@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -50,6 +52,11 @@ module Prism
     has_many :user_addresses, through: :personal, source: :organization_addresses
     has_one  :main_address, dependent: :destroy
     has_one  :default_address, through: :main_address, source: :organization_address
+
+    has_many :user_shipping_addresses, -> { where("organization_addresses.types ? 'shipping' AND organization_addresses.types ->> 'shipping' = '1'") },
+                                       through: :personal, source: :organization_addresses
+    has_many :user_billing_addresses, -> { where("organization_addresses.types ? 'billing' AND organization_addresses.types ->> 'billing' = '1'") },
+                                      through: :personal, source: :organization_addresses
 
     has_many :people, dependent: :destroy
     has_many :companies, through: :person, source: :companies

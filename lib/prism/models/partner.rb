@@ -51,6 +51,7 @@ module Prism
 
     belongs_to :city
     belongs_to :province
+    belongs_to :district
 
     has_many :partner_machines
     has_many :printing_machines, through: :partner_machines
