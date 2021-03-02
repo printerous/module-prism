@@ -2,6 +2,8 @@ module Prism
   class CustomerRegistrationOfficer
     attr_reader :params, :user
 
+    # :name, :phone, :gender, :industry
+    # :email, :password, :password_confirmation
     def initialize(params)
       @params = params
       @user   = build_user
@@ -16,6 +18,7 @@ module Prism
           phone: user.phone
         )
 
+        @user.data   = { industry: params[:industry] }
         @user.person = build_person
         @user.person.personal = @personal
         @user.person.organization_member.phone = @user.phone
@@ -49,7 +52,7 @@ module Prism
       person.phone         = user.phone
       person.gender        = user.gender
       person.date_of_birth = user.dob
-      person.data          = []
+      person.data          = { industry: params[:industry] }
       person.integration   = []
 
       person

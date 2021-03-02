@@ -116,6 +116,14 @@ module Prism
       Date.strptime(birthdate, '%Y-%m-%d')
     end
 
+    def industry
+      data['industry']
+    end
+
+    def industry=(value)
+      data['industry'] = value
+    end
+
     def sso_data
       {
         id: id,
