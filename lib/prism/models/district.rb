@@ -41,5 +41,9 @@ module Prism
       by_query(params[:query])
         .by_city_id(params[:city_id])
     end
+
+    def self.default_origin
+      by_query('Kebon Jeruk').first
+    end
   end
 end
