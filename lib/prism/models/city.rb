@@ -35,11 +35,16 @@ module Prism
     scope :by_query, lambda { |query|
       return where(nil) if query.blank?
 
-      where(
-        'provinces.name ILIKE :query OR provinces.abbr ILIKE :query
+      where('provinces.name ILIKE :query OR provinces.abbr ILIKE :query
         cities.name ILIKE :query OR cities.abbr ILIKE :query',
         query: "%#{query}%"
       )
+    }
+
+    scope :by_id, lambda { |id|
+      return where(nil) if id.blank?
+
+      where("cities.id = ?", id)
     }
 
     scope :by_province_id, lambda { |province_id|
@@ -52,6 +57,7 @@ module Prism
       params = {} if params.blank?
       by_city(params[:query])
         .by_province_id(params[:province_id])
+        .by_id(params[:id])
     end
 
     def destination_name

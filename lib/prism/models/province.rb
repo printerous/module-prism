@@ -27,10 +27,17 @@ module Prism
         .order(Arel.sql("similarity(provinces.name, '#{query}') DESC"))
     }
 
+    scope :by_id, lambda { |id|
+      return where(nil) if id.blank?
+
+      where("provinces.id = ?", id)
+    }
+
     def self.search(params = {})
       params = {} if params.blank?
-      
+
       by_query(params[:query])
+        .by_id(params[:id])
     end
   end
 end

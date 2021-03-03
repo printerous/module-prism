@@ -38,7 +38,7 @@ module Prism
     scope :by_id, lambda { |id|
       return where(nil) if id.blank?
 
-      where(id: id)
+      where("districts.id = ?", id)
     }
 
     def self.search(params = {})
