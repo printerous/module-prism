@@ -17,6 +17,7 @@ module Prism
   class Province < PrismModel
     acts_as_paranoid
 
+    belongs_to :country
     has_many :cities
 
     scope :by_query, lambda { |query|
