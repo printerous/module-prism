@@ -35,11 +35,18 @@ module Prism
       where(city_id: city_id)
     }
 
+    scope :by_id, lambda { |id|
+      return where(nil) if id.blank?
+
+      where(id: id)
+    }
+
     def self.search(params = {})
       params = {} if params.blank?
-      
+
       by_query(params[:query])
         .by_city_id(params[:city_id])
+        .by_id(params[:id])
     end
 
     def self.default_origin
