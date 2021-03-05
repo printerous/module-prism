@@ -40,11 +40,19 @@ module Prism
       where(city_id: city_id)
     }
 
+    scope :by_district, lambda { |district_id|
+      return where(nil) if district_id.blank?
+
+      district = District.find(district_id)
+      where(city_id: district.city_id)
+    }
+
     def self.search(params = {})
       params = {} if params.blank?
 
       by_query(params[:query])
         .by_city(params[:city_id])
+        .by_district(params[:district_id])
     end
 
     def full_address_name
