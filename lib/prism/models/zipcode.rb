@@ -18,7 +18,7 @@ module Prism
   class Zipcode < PrismModel
     acts_as_paranoid
 
-    belongs_to :district, optional: true
+    belongs_to :city, optional: true
 
     scope :by_query, lambda { |query|
       return where(nil) if query.blank?
@@ -34,10 +34,17 @@ module Prism
         .order(Arel.sql("similarity(zipcodes.province_name, '#{query}') DESC"))
     }
 
+    scope :by_city, lambda { |city_id|
+      return where(nil) if city_id.blank?
+
+      where(city_id: city_id)
+    }
+
     def self.search(params = {})
       params = {} if params.blank?
 
       by_query(params[:query])
+        .by_city(params[:city_id])
     end
 
     def full_address_name
