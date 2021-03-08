@@ -52,5 +52,15 @@ module Prism
     acts_as_paranoid
 
     belongs_to :order, -> { with_deleted }
+    belongs_to :product_type, -> { with_deleted }
+    
+    has_many :order_website_statuses
+    has_one :order_website_status, -> { where.not(time: nil).order time: :desc }
+
+    def preview
+      return ( file_preview.compact.reject{ |item| item == "null" || item.blank? }.try(:first) || 'placeholder-nopreview.png' ) if file_preview.present?
+  
+      'placeholder-nopreview.png'
+    end
   end
 end

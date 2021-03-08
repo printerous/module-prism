@@ -66,6 +66,8 @@ module Prism
     has_one   :slack_integration, -> { where(messaging_type: 'slack', revoked_at: nil) }, class_name: 'Prism::UserMessagingIntegration'
     has_many  :authentication_tokens, class_name: 'Prism::AuthenticationToken', as: :resource, dependent: :destroy
     has_many  :social_accounts, dependent: :destroy
+    has_many  :orders, foreign_key: :user_id
+    has_many  :website_orders, -> { where(type: 'OrderWebsite') }, class_name: 'Prism::Order', foreign_key: :user_id
 
     # Stark Module Dependencies
     has_many :user_carts, class_name: 'Stark::Cart', dependent: :destroy

@@ -39,5 +39,50 @@ module Prism
     belongs_to :currency
 
     has_one :organization, through: :organization_member
+    has_one :person, through: :organization_member
+    has_many :order_items, dependent: :destroy
+    has_many :product_types, through: :order_items
+
+    scope :by_query, lambda { |query|
+      return where(nil) if query.blank?
+  
+      eager_load(:order_items, :organization, :person, :product_types)
+        .where(
+          'order_items.number ILIKE :query OR
+          order_items.title ILIKE :query OR
+          orders.number ILIKE :query OR
+          organizations.name ILIKE :query OR
+          people.name ILIKE :query OR
+          product_types.name ILIKE :query',
+          query: "%#{query}%"
+        )
+    }
+
+    scope :by_website_status, lambda { |status|
+      return where(nil) if status.blank?
+
+      eager_load(order_items: [:order_website_status])
+        .where(
+          'order_website_statuses.status ILIKE :query',
+          query: "%#{status}%"
+        ).where(
+          'order_website_statuses.time IN (
+                      SELECT max(status.time) FROM order_website_statuses as status
+                      WHERE status.time IS NOT NULL
+                      GROUP BY status.order_item_id
+                      )'
+        )
+    }
+
+    def self.search(params)
+      params = {} if params.blank?
+
+      by_query(params[:query])
+        .by_website_status(params[:status])
+    end
+
+    def cart_payment
+      Stark::CartPayment.order(id: :desc).find_by(order_reference: number)
+    end
   end
 end
