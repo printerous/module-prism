@@ -53,8 +53,10 @@ module Prism
 
     belongs_to :order, -> { with_deleted }
     belongs_to :product_type, -> { with_deleted }
-    
+    belongs_to :shipping_address, class_name: 'Prism::OrganizationAddress', foreign_key: :shipping_address_id
+      
     has_many :order_website_statuses
+    has_many :children, class_name: 'Prism::OrderItem', foreign_key: :parent_id
     has_one :order_website_status, -> { where.not(time: nil).order time: :desc }
 
     def preview
