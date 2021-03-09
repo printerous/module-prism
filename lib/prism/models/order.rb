@@ -46,7 +46,7 @@ module Prism
 
     scope :by_query, lambda { |query|
       return where(nil) if query.blank?
-  
+
       eager_load(:order_items, :organization, :person, :product_types)
         .where(
           'order_items.number ILIKE :query OR
@@ -80,6 +80,12 @@ module Prism
 
       by_query(params[:query])
         .by_website_status(params[:status])
+    end
+
+    def self.generate_number(code:)
+      number = format('%<code>s%<date>s%<random>s', code: code, date: Date.today.strftime('%y%m%d'), random: SecureRandom.hex.slice(0, 4).upcase)
+      number.upcase!
+      with_deleted.find_by(number: number) ? generate_number(code) : number
     end
 
     def cart_payment

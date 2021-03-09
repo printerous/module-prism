@@ -25,6 +25,8 @@ require File.dirname(__FILE__) + '/organization.rb'
 
 module Prism
   class Personal < Organization
+    has_one :personal_member, class_name: 'Prism::OrganizationMember', foreign_key: :organization_member_id
+
     def person
       people.order(id: :asc).first
     end

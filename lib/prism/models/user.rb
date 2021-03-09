@@ -48,6 +48,7 @@ module Prism
     has_one :person_account, dependent: :destroy
     has_one :person, through: :person_account
     has_one :personal, through: :person
+    has_one :personal_member, through: :personal
 
     has_many :user_addresses, through: :personal, source: :organization_addresses
     has_one  :main_address, dependent: :destroy
