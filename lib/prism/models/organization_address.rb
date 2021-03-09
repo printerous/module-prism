@@ -51,6 +51,20 @@ module Prism
         .order(Arel.sql("similarity(organization_addresses.street, '#{query}') DESC"))
     }
 
+    scope :by_city_name, lambda { |query|
+      return where(nil) if query.blank?
+
+      eager_load(:city)
+        .where("cities.name ILIKE :query", query: "%#{query}%")
+    }
+
+    scope :by_district_name, lambda { |query|
+      return where(nil) if query.blank?
+
+      eager_load(:district)
+        .where("districts.name ILIKE :query", query: "%#{query}")
+    }
+
     scope :by_district_id, lambda { |district_id|
       return where(nil) if district_id.blank?
 
