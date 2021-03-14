@@ -15,6 +15,8 @@ module Prism
     end
 
     def partners
+      return [] if !valid_params?
+
       selected_partner = Prism::PartnerFinder.new(variant_id, options).perform.first
       return [] if selected_partner.blank?
 
