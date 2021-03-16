@@ -71,9 +71,17 @@ module Prism
       where('organization_addresses.district_id = ?', district_id)
     }
 
+    scope :by_city_id, lambda { |city_id|
+      return where(nil) if city_id.blank?
+
+      filtered_disctrict = Prism::District.where(city_id: city_id).map(&:id)
+      where(district_id: filtered_disctrict)
+    }
+
     def self.search(params = {})
       params = {} if params.blank?
       by_query(params[:query])
+        .by_city_id(params[:city_id])
         .by_district_id(params[:district_id])
     end
 
