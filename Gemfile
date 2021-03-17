@@ -9,3 +9,6 @@ gem 'rspec', '~> 3.0'
 
 gem 'acts-as-taggable-on'
 gem 'paranoia', '~> 2.2'
+
+gem 'carrierwave'
+gem 'fog-aws'

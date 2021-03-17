@@ -2,10 +2,17 @@
 
 require 'prism/version'
 require 'prism/rails'
+require 'carrierwave/orm/activerecord'
+require 'prism/carrierwave'
+require 'prism/activable'
 
 module Prism
   class Error < StandardError; end
   # Your code goes here...
+end
+
+Dir[File.dirname(__FILE__) + '/prism/uploader/*'].sort.each do |file_name|
+  require file_name if File.exist?(file_name)
 end
 
 require File.dirname(__FILE__) + '/prism/prism_model.rb'
