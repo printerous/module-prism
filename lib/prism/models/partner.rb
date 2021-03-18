@@ -76,5 +76,14 @@ module Prism
     def self.options
       all.collect { |p| [p.name, p.id] }
     end
+
+    scope :by_name, lambda { |name|
+      return where(nil) if name.blank?
+
+      where(
+        'partners.name ILIKE :name OR partners.legal_name ILIKE :name',
+        name: "%#{name}%"
+      )
+    }
   end
 end
