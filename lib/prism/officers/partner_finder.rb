@@ -15,33 +15,35 @@ module Prism
     end
 
     def partners
-      return [] if !valid_params?
+      return [] unless valid_params?
 
-      selected_partner = Prism::PartnerFinder.new(variant_id, options).perform.first
-      return [] if selected_partner.blank?
+      first_partner = Prism::PartnerFinder.new(variant_id, options).perform.first
+      return [] if first_partner.blank?
 
-      origin_latitude  = options[:latitude].to_f
-      origin_longitude = options[:longitude].to_f
+      [first_partner, surrounding_partners(first_partner, priority: first_partner.priority)].flatten.delete_if(&:blank?)
+    end
 
-      options.merge!(
-        latitude: selected_partner.latitude,
-        longitude: selected_partner.longitude,
-        priority: selected_partner.priority,
+    def surrounding_partners(first_partner, priority: false)
+      surr_options = options.merge(
+        latitude: first_partner.latitude,
+        longitude: first_partner.longitude,
+        priority: priority,
         distance: 25,
-        exclude: selected_partner.id
+        exclude: first_partner.id
       )
 
-      nearest_partners = Prism::PartnerFinder.new(variant_id, options).perform
-      nearest_partners.each do |partner|
+      surroundings = Prism::PartnerFinder.new(variant_id, surr_options).perform
+      surroundings.each do |partner|
         distance = Prism::DistanceCalculator.new(
           [partner.latitude, partner.longitude],
-          [origin_latitude, origin_longitude],
+          [options[:latitude].to_f, options[:longitude].to_f],
           { units: :km }
         ).calculate
+
         partner.distance = distance
       end
 
-      [selected_partner, nearest_partners].flatten.delete_if(&:blank?)
+      surroundings
     end
 
     private
