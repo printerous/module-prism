@@ -37,7 +37,7 @@ module Prism
 
       @partners.each do |partner|
         Rails.logger.info '*' * 100
-        Rails.logger.info "== PARTNER #{partner.name} =="
+        Rails.logger.info "----------------------------- PARTNER #{partner.name} -----------------------------"
 
         machines = partner.active_printing_machines.large_formats.order("properties -> 'position' ASC").uniq
         if machines.blank?
@@ -47,22 +47,21 @@ module Prism
         end
 
         machines.each do |machine|
-          puts "======== #{machine.id} -------------"
-          machine_width     = machine.properties['max_paper_width']
-          puts machine_width
-          paper             = PrintingPaper.large_formats
-                                           .where('width <= ?', machine_width)
-                                           .where('width >= ?', print_width)
-                                           .min_by(&:width)
+          puts "----------------------------- #{machine.id} -----------------------------"
+          machine_width = machine.properties['max_paper_width']
+          paper         = PrintingPaper.large_formats
+                                       .where('width <= ?', machine_width)
+                                       .where('width >= ?', print_width)
+                                       .min_by(&:width)
 
-          puts "PAPER ID#{paper.id}"
           next if paper.blank?
+          puts "PAPER ID: #{paper.id}"
 
           puts "print_width #{print_width}"
           puts "print_length #{print_length}"
-          material_area     = (print_width * print_length / 1_000_000).round(2)
+          material_area = (print_width * print_length / 1_000_000).round(2)
 
-          puts "====== MATERIAL AREIA#{material_area}"
+          puts "----------------------------- MATERIAL AREA: #{material_area}"
           @prices << result = {
             partner: partner,
             partner_id: partner.id,
@@ -89,8 +88,8 @@ module Prism
           @breakdowns.each do |breakdown|
             formula = breakdown.module_formula.constantize
             value   = formula.new(breakdown: breakdown, product: self, partner: partner, machine: machine, paper: paper).calculate
-            Rails.logger.info "---------------------- #{breakdown.module_formula} : #{partner.name}------------------"
-            Rails.logger.info "-------------------------- #{value} --------------------------"
+            Rails.logger.info "----------------------------- #{breakdown.module_formula} : #{partner.name} -----------------------------"
+            Rails.logger.info "----------------------------- #{value} -----------------------------"
 
             if value == -1
               begin
