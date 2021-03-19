@@ -4,16 +4,17 @@ module Prism
   class DistanceCalculator
     attr_reader :origin, :destination
 
+    # origin|destination --> [lat, long] e.g [-6.361624, 106.7614371]
     def initialize(origin = [], destination = [], options = {})
-      @origin = origin
-      @destination = destination
+      @origin      = origin.map(&:to_f)
+      @destination = destination.map(&:to_f)
     end
 
     def calculate
       return unless valid?
 
-      rad_per_deg = Math::PI / 180 # PI / 180
-      rkm = 6371                  # Earth radius in kilometers
+      rad_per_deg = Math::PI / 180  # PI / 180
+      rkm = 6371                    # Earth radius in kilometers
       # rm = rkm * 1000             # Radius in meters
 
       dlat_rad = (destination[0] - origin[0]) * rad_per_deg # Delta, converted to rad
