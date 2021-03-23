@@ -152,7 +152,7 @@ module Prism
         end
       end
 
-      @prices.sort! {|a, b| [a[:total]] <=> [b[:total]] }
+      @prices.sort! { |a, b| [a[:total]] <=> [b[:total]] }
     end
 
     def spec
