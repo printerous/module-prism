@@ -61,6 +61,15 @@ module Prism
           puts "print_length #{print_length}"
           material_area = (print_width * print_length / 1_000_000).round(2)
 
+          paper.length = 30_000 if paper.length.blank?
+          impose_width = [width, length].min
+          impose_count = (paper.width / impose_width).to_i
+          impose_count = 1 if impose_count < 1
+
+          product_wide  = (width * length / 1_000_000.to_f).round(2)
+          material_wide = product_wide * quantity
+          material_wide = 1.0 if material_wide < 1.0 # meter square
+
           puts "----------------------------- MATERIAL AREA: #{material_area}"
           @prices << result = {
             partner: partner,
@@ -80,7 +89,10 @@ module Prism
             print_color: print_color,
 
             hours: 0,
-            material_area: material_area
+            material_area: material_area,
+          material_wide: material_wide,
+          product_wide: product_wide,
+          impose_quantity: impose_count
           }.with_indifferent_access
 
           total = 0
