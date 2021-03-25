@@ -143,24 +143,34 @@ module Prism
     end
 
     def dimension
-      @dimension ||= if params[:size].blank?
-                       key = SpecKey.find_by(id: @calculator.properties['size_id'])
-                       key_2 = SpecKey.find_by(code: 'ukuranprodukjadi')
-                       value_id = _spec[key.id.to_s] || _spec[key_2.id.to_s]
+      @dimension ||=  begin
+        d = if params[:size].blank?
+          key = SpecKey.find_by(id: @calculator.properties['size_id'])
+          key_2 = SpecKey.find_by(code: 'ukuranprodukjadi')
+          value_id = _spec[key.id.to_s] || _spec[key_2.id.to_s]
 
-                       size     = SpecValue.find_by(id: value_id) || SpecValue.new
-                       width    = size&.properties['width_in_mm']&.to_f || 0
-                       length   = size&.properties['length_in_mm']&.to_f || 0
+          size     = SpecValue.find_by(id: value_id) || SpecValue.new
+          width    = size&.properties['width_in_mm']&.to_f || 0
+          length   = size&.properties['length_in_mm']&.to_f || 0
 
-                       {
-                         width: width,
-                         length: length
-                       }
-                     else
-                       {
-                         width: params[:size][:width]&.to_f,
-                         length: params[:size][:length]&.to_f
-                       }
+          {
+            width: width,
+            length: length
+          }
+          else
+          {
+            width: params[:size][:width]&.to_f,
+            length: params[:size][:length]&.to_f
+          }
+        end
+
+        shorter = d.min_by { |k, v| v }
+        longer  = d.max_by { |k, v| v }
+
+        {
+          width: shorter[1],
+          length: longer[1]
+        }
       end
     end
 
