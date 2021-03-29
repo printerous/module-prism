@@ -1,0 +1,21 @@
+en:
+  order_history:
+    logs:
+        created_log: "Check out the order."
+        created_sub_log: "Order received, please complete payment."
+        payment_accepted_log: "Payment has been verified."
+        payment_accepted_sub_log: "Payment has been received and your order will be processed immediately"
+        on_production_log: "Orders are being produced"
+        on_production_sub_log: "Order are being produced"
+        on_shipping_log: "Orders on the way"
+        on_shipping_sub_log: "Your order undershipment."
+        delivered_log: "Accepted"
+        delivered_sub_log: "Order has been delivered to customer."
+        cancelled_log: "Order cancelled"
+        cancelled_sub_log: "Order cancelled."
+        payment_expired_log: "Payment Expired"
+        payment_expired_sub_log: "Your payment has been expired."
+        waiting_payment_log: 'Waiting payment.'
+        waiting_payment_sub_log: 'Waiting for payment confirmation.'
+        no_log: "No history can be displayed."
+        no_sub_log: "Waiting for data updates."

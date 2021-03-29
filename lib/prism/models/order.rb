@@ -44,6 +44,10 @@ module Prism
     has_many :order_shippings, dependent: :destroy
     has_many :product_types, through: :order_items
 
+    enum tax_policy:     %i[notax tax_inclusive tax_exclusive]
+    enum status:         %i[draft submitted completed cancelled]
+    enum payment_status: %i[unpaid partial paid]
+
     scope :by_query, lambda { |query|
       return where(nil) if query.blank?
 
@@ -89,7 +93,11 @@ module Prism
     end
 
     def cart_payment
-      Stark::CartPayment.order(id: :desc).find_by(order_reference: number)
+      Stark::CartPayment.not_cancelled.order(id: :desc).find_by(order_reference: number)
+    end
+
+    def paid?
+      payment_status == 'paid'
     end
   end
 end

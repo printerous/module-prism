@@ -47,8 +47,8 @@ module Prism
 
     has_one :person_account, dependent: :destroy
     has_one :person, through: :person_account
-    has_one :personal, through: :person
-    has_one :personal_member, through: :personal
+    has_one :personal_member, through: :person
+    has_one :personal, through: :personal_member
 
     has_many :user_addresses, through: :personal, source: :organization_addresses
     has_one  :main_address, dependent: :destroy
@@ -111,6 +111,14 @@ module Prism
     def reset_authentication_token!
       self.authentication_token = nil
       save!
+    end
+
+    def first_name
+      name.partition(' ').first
+    end
+
+    def last_name
+      name.partition(' ').last
     end
 
     def dob

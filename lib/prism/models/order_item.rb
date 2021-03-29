@@ -53,16 +53,35 @@ module Prism
 
     belongs_to :order, -> { with_deleted }
     belongs_to :product_type, -> { with_deleted }
+    belongs_to :product, class_name: 'Cuanki::Product', optional: true
+
     belongs_to :shipping_address, class_name: 'Prism::OrganizationAddress', foreign_key: :shipping_address_id
-      
+
     has_many :order_website_statuses
+    has_one  :order_website_status, -> { where.not(time: nil).order time: :desc }
+
     has_many :order_website_timelines
     has_many :children, class_name: 'Prism::OrderItem', foreign_key: :parent_id
-    has_one :order_website_status, -> { where.not(time: nil).order time: :desc }
+
+    has_many :order_design_approvals, class_name: 'Prism::OrderDesignApproval', dependent: :destroy
+    has_many :order_item_prices, dependent: :destroy
+
+    enum tax_policy:  %i[notax tax_inclusive tax_exclusive]
+    enum status:      %i[draft submitted completed cancelled]
+
+    def self.generate_number(order_number:, counter: 1)
+      number = format('%<order_number>s-%<counter>d', order_number: order_number, counter: counter)
+      number.upcase!
+      with_deleted.find_by(number: number) ? generate_number(order_number: order_number, counter: counter + 1) : number
+    end
+
+    def previews
+      [file_preview].flatten.reject { |item| item.blank? || item == "null" }
+    end
 
     def preview
-      return ( file_preview.compact.reject{ |item| item == "null" || item.blank? }.try(:first) || 'placeholder-nopreview.png' ) if file_preview.present?
-  
+      return previews.first if previews.present?
+
       'placeholder-nopreview.png'
     end
   end
