@@ -20,8 +20,9 @@ module Prism
 
     def logs
       locale    = I18n.locale.to_s
-      file_path = Rails.root.join("vendor/prism/lib/prism/locale/#{locale}.yml")
-      yml = YAML.load(File.read(file_path)).with_indifferent_access
+      file_path = File.join(File.dirname(__dir__), "locale/#{locale}.yml")
+
+      yml = YAML.safe_load(File.read(file_path)).with_indifferent_access
       yml[locale]['order_history']['logs']
     end
   end
