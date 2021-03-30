@@ -21,8 +21,8 @@ module Stark
       def inactives
         now = Time.zone.now
 
-        where("#{table_name}.active_at IS NULL OR #{table_name}.active_at > ?
-          OR (#{table_name}.inactive_at IS NOT NULL AND #{table_name}.inactive_at <= ?)", now)
+        where("#{table_name}.active_at IS NULL OR #{table_name}.active_at > :now
+          OR (#{table_name}.inactive_at IS NOT NULL AND #{table_name}.inactive_at <= :now)", now: now)
       end
 
       def activate!(inactive_at: nil)
