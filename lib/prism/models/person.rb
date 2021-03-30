@@ -30,5 +30,9 @@ module Prism
 
     has_one  :personal_member, class_name: 'Prism::OrganizationMember', foreign_key: :people_id
     has_one  :personal, through: :organization_member
+
+    def get_integration_id(model)
+      integration.find { |int| int['type'] == model.to_s }.try(:[], 'id')
+    end
   end
 end

@@ -59,6 +59,7 @@ module Prism
 
     has_many :order_website_statuses
     has_one  :order_website_status, -> { where.not(time: nil).order time: :desc }
+    has_many :order_website_statuses_active, -> { where.not(time: nil).order time: :asc }, class_name: 'OrderWebsiteStatus'
 
     has_many :order_website_timelines
     has_many :children, class_name: 'Prism::OrderItem', foreign_key: :parent_id
