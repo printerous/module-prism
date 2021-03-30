@@ -66,6 +66,9 @@ module Prism
     has_many :order_design_approvals, class_name: 'Prism::OrderDesignApproval', dependent: :destroy
     has_many :order_item_prices, dependent: :destroy
 
+    has_many :order_shipping_items, dependent: :destroy
+    has_one  :order_shipping_item, -> { order(id: :desc) }
+
     has_one  :cart_item_conversion, -> { order(id: :desc) }, class_name: 'Stark::CartItemConversion'
 
     enum tax_policy:  %i[notax tax_inclusive tax_exclusive]
@@ -89,6 +92,16 @@ module Prism
 
     def cart_item
       cart_item_conversion.cart_item
+    end
+
+    def working_day
+      item_prices = order_item_prices
+      item_prices.select { |ip| %w[waiting sent approved].include?(ip.status) }.first&.working_day ||
+      item_prices.first.working_day
+    end
+
+    def shipping_speed
+      order_shipping_item.order_shipping.shipping_speed
     end
   end
 end

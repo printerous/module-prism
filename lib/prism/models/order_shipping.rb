@@ -26,6 +26,7 @@
 module Prism
   class OrderShipping < PrismModel
     acts_as_paranoid
+
     belongs_to :order
 
     has_many :order_shipping_items

@@ -40,6 +40,7 @@ module Prism
 
     has_one :organization, through: :organization_member
     has_one :person, through: :organization_member
+
     has_many :order_items, dependent: :destroy
     has_many :order_shippings, dependent: :destroy
     has_many :product_types, through: :order_items
