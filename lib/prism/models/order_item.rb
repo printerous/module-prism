@@ -66,6 +66,8 @@ module Prism
     has_many :order_design_approvals, class_name: 'Prism::OrderDesignApproval', dependent: :destroy
     has_many :order_item_prices, dependent: :destroy
 
+    has_one  :cart_item_conversion, -> { order(id: :desc) }, class_name: 'Stark::CartItemConversion'
+
     enum tax_policy:  %i[notax tax_inclusive tax_exclusive]
     enum status:      %i[draft submitted completed cancelled]
 
@@ -83,6 +85,10 @@ module Prism
       return previews.first if previews.present?
 
       'placeholder-nopreview.png'
+    end
+
+    def cart_item
+      cart_item_conversion.cart_item
     end
   end
 end
