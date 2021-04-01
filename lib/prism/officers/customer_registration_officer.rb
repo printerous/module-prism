@@ -21,7 +21,7 @@ module Prism
         @user.data   = { industry: params[:industry] }
         @user.person = build_person
         @user.person.personal = @personal
-        @user.person.organization_member.phone = @user.phone
+        @user.person.personal_member.phone = @user.phone
         @user.save!
       rescue ActiveRecord::RecordInvalid
         raise ActiveRecord::Rollback
