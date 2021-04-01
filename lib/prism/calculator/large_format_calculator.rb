@@ -90,9 +90,9 @@ module Prism
 
             hours: 0,
             material_area: material_area,
-          material_wide: material_wide,
-          product_wide: product_wide,
-          impose_quantity: impose_count
+            material_wide: material_wide,
+            product_wide: product_wide,
+            impose_quantity: impose_count
           }.with_indifferent_access
 
           total = 0
@@ -244,7 +244,8 @@ module Prism
     def finishing
       @finishing ||= begin
         spec_key = SpecKey.find_by(code: :finishing)
-        return unless value_id = _spec[spec_key.id.to_s]
+        value_id = _spec[spec_key.id.to_s]
+        return if value_id.blank?
 
         SpecValue.find_by(id: value_id)
       end
