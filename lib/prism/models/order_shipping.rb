@@ -28,6 +28,7 @@ module Prism
     acts_as_paranoid
 
     belongs_to :order
+    belongs_to :organization_address, optional: true
 
     has_many :order_shipping_items
     has_many :order_items, through: :order_shipping_items
