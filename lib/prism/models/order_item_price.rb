@@ -30,6 +30,7 @@ module Prism
     acts_as_paranoid
 
     belongs_to :order_item
+    belongs_to :partner, optional: true
 
     enum status: %i[waiting sent rejected approved skipped cancelled]
 
