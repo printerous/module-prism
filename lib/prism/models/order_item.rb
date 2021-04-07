@@ -55,7 +55,8 @@ module Prism
     belongs_to :product_type, -> { with_deleted }
     belongs_to :product, class_name: 'Cuanki::Product', optional: true
 
-    belongs_to :shipping_address, class_name: 'Prism::OrganizationAddress', foreign_key: :shipping_address_id
+    belongs_to :shipping_address, -> { with_deleted }, class_name: 'Prism::OrganizationAddress', foreign_key: :shipping_address_id, optional: true
+    belongs_to :billing_address, -> { with_deleted }, class_name: 'Prism::OrganizationAddress', foreign_key: :billing_address_id, optional: true
 
     has_many :order_website_statuses
     has_one  :order_website_status, -> { where.not(time: nil).order time: :desc }
@@ -71,6 +72,10 @@ module Prism
     has_one  :order_shipping_item, -> { order(id: :desc) }
 
     has_one  :cart_item_conversion, -> { order(id: :desc) }, class_name: 'Stark::CartItemConversion'
+
+    has_one :invoice_item
+    has_one :invoice, through: :invoice_item
+    has_one :invoice_main, class_name: 'InvoiceMain', through: :invoice_item
 
     enum tax_policy:  %i[notax tax_inclusive tax_exclusive]
     enum status:      %i[draft submitted completed cancelled]

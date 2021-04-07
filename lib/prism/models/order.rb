@@ -45,6 +45,8 @@ module Prism
     has_many :order_shippings, dependent: :destroy
     has_many :product_types, through: :order_items
 
+    has_many :order_terms
+    
     enum tax_policy:     %i[notax tax_inclusive tax_exclusive]
     enum status:         %i[draft submitted completed cancelled]
     enum payment_status: %i[unpaid partial paid]
@@ -99,6 +101,10 @@ module Prism
 
     def paid?
       payment_status == 'paid'
+    end
+
+    def term_of_invoice
+      payment_info['term_of_invoice']
     end
   end
 end
