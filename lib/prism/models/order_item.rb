@@ -49,11 +49,15 @@
 
 module Prism
   class OrderItem < PrismModel
+    include ActionView::Helpers::NumberHelper
     acts_as_paranoid
 
     belongs_to :order, -> { with_deleted }
     belongs_to :product_type, -> { with_deleted }
     belongs_to :product, class_name: 'Cuanki::Product', optional: true
+
+    belongs_to :parent, class_name: 'Prism::OrderItem', foreign_key: :parent_id
+    has_many   :item_groups, class_name: 'Prism::OrderItem', foreign_key: :parent_id, dependent: :destroy
 
     belongs_to :shipping_address, -> { with_deleted }, class_name: 'Prism::OrganizationAddress', foreign_key: :shipping_address_id, optional: true
     belongs_to :billing_address, -> { with_deleted }, class_name: 'Prism::OrganizationAddress', foreign_key: :billing_address_id, optional: true
@@ -102,6 +106,46 @@ module Prism
 
     def user_spec
       cart_item&.spec || spec
+    end
+
+    def quantity_label
+      @quantity_label ||= data['quantity_label'] || generate_label!
+    end
+
+    def generate_label!
+      formatted_qty = number_with_precision(quantity, delimiter: '.', separator: ',', precision: 0)
+      data['quantity_label'] = [formatted_qty, unit].join(' ')
+      data['quantity_label'] = [formatted_qty, combined_diffs].join(' x ') if combined?
+
+      update_columns data: data
+      data['quantity_label']
+    end
+
+    def combined_diffs
+      values = spec.values
+
+      if parent.present?
+        other_values = parent.spec.values
+      else
+        other_values = item_groups.first.spec.values
+      end
+
+      diffs = values - other_values
+      diffs.join(', ')
+    end
+
+    def combined_quantity
+      return quantity unless combined?
+
+      if parent.blank?
+        quantity + item_groups.sum(:quantity)
+      else
+        parent.quantity + parent.item_groups.sum(:quantity)
+      end
+    end
+
+    def combined?
+      item_groups.present? || parent.present?
     end
 
     def working_day

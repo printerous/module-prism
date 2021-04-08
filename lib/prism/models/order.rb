@@ -42,11 +42,13 @@ module Prism
     has_one :person, through: :organization_member
 
     has_many :order_items, dependent: :destroy
+    has_many :main_order_items, -> { where(parent_id: nil) }, class_name: 'Prism::OrderItem'
+
     has_many :order_shippings, dependent: :destroy
     has_many :product_types, through: :order_items
 
     has_many :order_terms
-    
+
     enum tax_policy:     %i[notax tax_inclusive tax_exclusive]
     enum status:         %i[draft submitted completed cancelled]
     enum payment_status: %i[unpaid partial paid]
