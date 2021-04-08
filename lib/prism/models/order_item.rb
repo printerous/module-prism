@@ -101,7 +101,7 @@ module Prism
     end
 
     def cart_item
-      cart_item_conversion.cart_item
+      cart_item_conversion&.cart_item
     end
 
     def user_spec

@@ -108,5 +108,9 @@ module Prism
     def term_of_invoice
       payment_info['term_of_invoice']
     end
+
+    def invoice
+      Prism::InvoiceMain.by_integration('Prism::Order', id)
+    end
   end
 end
