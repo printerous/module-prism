@@ -100,6 +100,10 @@ module Prism
       cart_item_conversion.cart_item
     end
 
+    def user_spec
+      cart_item&.spec || spec
+    end
+
     def working_day
       item_prices = order_item_prices
       item_prices.select { |ip| %w[waiting sent approved].include?(ip.status) }.first&.working_day ||
