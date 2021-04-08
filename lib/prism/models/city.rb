@@ -61,9 +61,8 @@ module Prism
     end
 
     def destination_name
-      destination = province&.name.to_s
-      destination = "#{destination}, #{city&.name}" unless city.blank?
-      destination
+      provice_name = province&.name.to_s
+      "#{name}, #{provice_name}"
     end
   end
 end
