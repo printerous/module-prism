@@ -45,6 +45,8 @@ module Prism
   class User < PrismModel
     acts_as_paranoid
 
+    belongs_to :role, optional: true
+
     has_one :person_account, dependent: :destroy
     has_one :person, through: :person_account
     has_one :personal, through: :person
@@ -77,6 +79,16 @@ module Prism
     enum gender: %i[female male]
 
     validates :name, presence: true
+
+    def self.sales_users
+      sales_codes = Role.sales_roles
+      eager_load(:role)
+        .where('roles.code IN (:sales_code)', sales_code: sales_codes)
+    end
+
+    def active?
+      deactivated_at.blank?
+    end
 
     def slack_channel
       slack_integration&.messaging_id

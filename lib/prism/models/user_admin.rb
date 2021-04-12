@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -41,5 +43,26 @@
 
 module Prism
   class UserAdmin < User
+    def self.sales_options
+      sales_users.collect do |user|
+        [
+          user.name, user.id, {
+            'data-showme' => user.active? ? '1' : '0',
+            'data-active' => '1'
+          }
+        ]
+      end
+    end
+
+    def self.active_sales_options
+      sales_users.where(deactivated_at: nil).collect do |user|
+        [
+          user.name, user.id, {
+            'data-showme' => user.active? ? '1' : '0',
+            'data-active' => '1'
+          }
+        ]
+      end
+    end
   end
 end
