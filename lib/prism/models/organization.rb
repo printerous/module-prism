@@ -29,5 +29,6 @@ module Prism
     has_many :people, through: :organization_members
 
     has_many :organization_addresses, dependent: :destroy
+    has_one  :organization_financial_detail, dependent: :destroy
   end
 end

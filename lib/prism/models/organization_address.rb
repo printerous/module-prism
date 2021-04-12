@@ -126,5 +126,9 @@ module Prism
         'address': address
       }
     end
+
+    def city_name
+      city&.name
+    end
   end
 end

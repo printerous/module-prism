@@ -53,17 +53,43 @@ module Prism
       where(province_id: province_id)
     }
 
+    scope :column_selection, lambda { |latitude, longitude|
+      return select("#{Prism::City.table_name}.*") if latitude.blank? || longitude.blank?
+
+      select("#{Prism::City.table_name}.*, #{distance_selector(latitude, longitude)}").order('distance asc')
+    }
+
     def self.search(params = {})
       params = {} if params.blank?
-      by_city(params[:query])
+      
+      column_selection(params[:latitude], params[:longitude])
+        .by_city(params[:query])
         .by_province_id(params[:province_id])
         .by_id(params[:id])
     end
 
     def destination_name
-      destination = province&.name.to_s
-      destination = "#{destination}, #{city&.name}" unless city.blank?
-      destination
+      provice_name = province&.name.to_s
+      "#{name}, #{provice_name}"
+    end
+
+    private
+
+    def self.distance_selector(latitude, longitude)
+      sql = <<~SQL
+        (6371 *
+          ACOS(
+            COS(RADIANS(#{latitude})) *
+            COS(RADIANS(latitude)) *
+              COS(RADIANS(longitude) - RADIANS(#{longitude})
+            ) +
+            SIN(RADIANS(#{latitude})) *
+            SIN(RADIANS(latitude))
+          )
+        ) AS distance
+      SQL
+
+      sql
     end
   end
 end

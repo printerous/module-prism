@@ -17,7 +17,7 @@ module Prism
     def price
       @price ||= begin
         formula_price = product_price[:material_quantity] * material_folding_count * tier.price
-        [ratecard.price_minimum, formula_price].max
+        [ratecard.price_minimum, formula_price].reject(&:blank?).max
       end
     end
 

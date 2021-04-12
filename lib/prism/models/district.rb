@@ -41,16 +41,42 @@ module Prism
       where("districts.id = ?", id)
     }
 
+    scope :column_selection, lambda { |latitude, longitude|
+      return select("#{Prism::District.table_name}.*") if latitude.blank? || longitude.blank?
+
+      select("#{Prism::District.table_name}.*, #{distance_selector(latitude, longitude)}").order('distance asc')
+    }
+
     def self.search(params = {})
       params = {} if params.blank?
 
-      by_query(params[:query])
+      column_selection(params[:latitude], params[:longitude])
+        .by_query(params[:query])
         .by_city_id(params[:city_id])
         .by_id(params[:id])
     end
 
     def self.default_origin
       by_query('Kebon Jeruk').first
+    end
+
+    private
+
+    def self.distance_selector(latitude, longitude)
+      sql = <<~SQL
+        (6371 *
+          ACOS(
+            COS(RADIANS(#{latitude})) *
+            COS(RADIANS(latitude)) *
+              COS(RADIANS(longitude) - RADIANS(#{longitude})
+            ) +
+            SIN(RADIANS(#{latitude})) *
+            SIN(RADIANS(latitude))
+          )
+        ) AS distance
+      SQL
+
+      sql
     end
   end
 end

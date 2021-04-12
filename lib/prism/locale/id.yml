@@ -1,0 +1,21 @@
+id:
+  order_history:
+    logs:
+      created_log: "Melakukan proses check out order."
+      created_sub_log: "Menunggu konfirmasi pembayaran."
+      payment_accepted_log: "Pembayaran sudah diverifikasi. "
+      payment_accepted_sub_log: "Pembayaran telah diterima dan pesanan Anda akan segera diproses"
+      on_production_log: "Pesanan sedang diproduksi"
+      on_production_sub_log: ""
+      on_shipping_log: "Pesanan telah dikirim."
+      on_shipping_sub_log: "Pesanan Anda dalam proses pengiriman oleh kurir."
+      delivered_log: "Barang Telah Diterima"
+      delivered_sub_log: "Barang sudah dikirim ke pelanggan."
+      cancelled_log: "Dibatalkan"
+      cancelled_sub_log: "Pesanan anda telah dibatalkan"
+      payment_expired_log: "Pembayaran Kadaluarsa"
+      payment_expired_sub_log: "Pembayaran anda sudah kadaluarsa."
+      waiting_payment_log: 'Menunggu pembayaran.'
+      waiting_payment_sub_log: ''
+      no_log: "Tidak ada data yang bisa di tampilkan."
+      no_sub_log: "Menunggu update data."
