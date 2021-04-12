@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: order_items
@@ -151,7 +153,7 @@ module Prism
     def working_day
       item_prices = order_item_prices
       item_prices.select { |ip| %w[waiting sent approved].include?(ip.status) }.first&.working_day ||
-      item_prices.first.working_day
+        item_prices.first.working_day
     end
 
     def shipping_speed
