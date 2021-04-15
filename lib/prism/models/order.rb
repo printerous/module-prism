@@ -112,5 +112,9 @@ module Prism
     def invoice
       Prism::InvoiceMain.by_integration('Prism::Order', id)
     end
+
+    def cart
+      cart_payment&.cart
+    end
   end
 end
