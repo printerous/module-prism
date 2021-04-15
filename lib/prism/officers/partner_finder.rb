@@ -24,6 +24,8 @@ module Prism
     end
 
     def surrounding_partners(first_partner, priority: false)
+      return [] if [first_partner.latitude, first_partner.longitude].any?(&:blank?)
+
       surr_options = options.merge(
         latitude: first_partner.latitude,
         longitude: first_partner.longitude,
