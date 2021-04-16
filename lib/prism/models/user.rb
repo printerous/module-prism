@@ -172,5 +172,17 @@ module Prism
     def send_welcome_notification
       Prism::EmailingOfficer.new(self, :welcome).perform
     end
+
+    def email_censored
+      email&.gsub(/(?<=.{2}).*@.*(?=\S{2})/, '****@****')
+    end
+
+    def name_censored
+      name&.gsub(/(?<=.{1})[^ ]/, '*')
+    end
+
+    def phone_censored
+      phone&.gsub(/(?<=.{2})[0-9]/, '*')
+    end
   end
 end
