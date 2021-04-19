@@ -41,7 +41,6 @@ module Prism
       "#{number(number)} #{unit.try(:pluralize)}"
     end
 
-
     def time_difference_day_hour(start_time, end_time)
       return '-' if start_time.blank? || end_time.blank?
 
@@ -104,6 +103,5 @@ module Prism
 
       date.try(:strftime, syntax)
     end
-
   end
 end
