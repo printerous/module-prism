@@ -118,7 +118,7 @@ module Prism
     end
 
     def ensure_order_shippings
-      return order_shippings if order_shippings.present?
+      return order_shippings if order_shippings.present? && order_shippings.map(&:order_shipping_items).flatten.present?
 
       order_shipping = order_shippings.new
       order_items.map do |order_item|
