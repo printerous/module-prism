@@ -120,9 +120,9 @@ module Prism
     def ensure_order_shippings
       return order_shippings if order_shippings.present?
 
-      order_shipping = orders_shippings.new
+      order_shipping = order_shippings.new
       order_items.map do |order_item|
-        order_shipping.order_shippings_items.build order_item_id: order_item.id
+        order_shipping.order_shipping_items.build order_item_id: order_item.id
       end
 
       [order_shipping]
