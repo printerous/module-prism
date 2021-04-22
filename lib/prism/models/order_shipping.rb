@@ -28,7 +28,7 @@ module Prism
     acts_as_paranoid
 
     belongs_to :order
-    belongs_to :organization_address, optional: true
+    belongs_to :organization_address, -> { with_deleted }, optional: true
 
     has_many :order_shipping_items, dependent: :destroy
     has_many :main_shipping_items, -> { joins(:order_item).where('order_items.parent_id': nil) }, class_name: 'Prism::OrderShippingItem'
