@@ -1,14 +1,15 @@
 module Prism
   class OmniauthOfficer
-    attr_reader :params, :errors, :user
+    attr_reader :params, :errors, :user, :new_registered
 
     # params
     # - user_id
     # - data from omniauth (uid, provider, name, email, etc)
     def initialize(params)
-      @params = params
-      @user   = Prism::User.find_by(id: params[:user_id])
-      @errors = []
+      @params         = params
+      @user           = Prism::User.find_by(id: params[:user_id])
+      @errors         = []
+      @new_registered = false
     end
 
     def perform
@@ -16,9 +17,10 @@ module Prism
 
       # Register
       if user.blank? && social_account.new_record?
-        officer = Prism::CustomerRegistrationOfficer.new(registration_params)
+        officer = Prism::CustomerRegistrationOfficer.new(registration_params.merge(confirmed_at: Time.now))
         officer.perform
         @user = officer.user
+        @new_registered = true
       end
 
       if social_account.persisted?

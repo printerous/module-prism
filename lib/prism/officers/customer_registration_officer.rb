@@ -22,6 +22,7 @@ module Prism
         @user.person = build_person
         @user.person.personal = @personal
         @user.person.personal_member.phone = @user.phone
+        @user.confirmed_at = params[:confirmed_at] if params[:confirmed_at].present?
         @user.save!
       rescue ActiveRecord::RecordInvalid
         raise ActiveRecord::Rollback
