@@ -24,9 +24,10 @@ module Prism
       return where(nil) if query.blank?
 
       query = ActiveRecord::Base.connection.quote_string(query.strip)
-      where("districts.name % :query OR REGEXP_REPLACE(districts.code, '\s', '', 'g') ILIKE :code", query: query, code: "%#{query}%")
+      joins(:city)
+        .where("districts.name % :query OR REGEXP_REPLACE(districts.code, '\s', '', 'g') ILIKE :code OR cities.name % :query", query: query, code: "%#{query}%")
+        .order(Arel.sql("similarity(cities.name, '#{query}') DESC"))
         .order(Arel.sql("similarity(districts.name, '#{query}') DESC"))
-        .order(Arel.sql("similarity(districts.code, '#{query}') DESC"))
     }
 
     scope :by_city_id, lambda { |city_id|
