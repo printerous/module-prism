@@ -118,7 +118,7 @@ module Prism
     end
 
     def ensure_order_shippings
-      return order_shippings if order_shippings.present? && order_shippings.map(&:order_shipping_items).flatten.present?
+      return order_shippings.reject{|os| os.order_shipping_items.blank? } if order_shippings.present? && order_shippings.map(&:order_shipping_items).flatten.present?
 
       Prism::EnsureOrderShippingOfficer.new(self).perform
       order_shippings.reload

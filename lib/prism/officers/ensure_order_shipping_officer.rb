@@ -12,14 +12,14 @@ module Prism
     def perform
       grouped_items.map do |_group, order_items|
         order_item = order_items.first
-        cart_item  = order_item.cart_item
+        cart_item  = order_item&.cart_item
 
         order_shipping = order.order_shippings.new
         order_shipping.organization_address_id = order_item.shipping_address_id
-        order_shipping.courier                 = cart_item.data.try(:[], 'shipping').try(:[], 'courier')
-        order_shipping.service_code            = cart_item.data.try(:[], 'shipping').try(:[], 'service')
+        order_shipping.courier                 = cart_item&.data.try(:[], 'shipping').try(:[], 'courier')
+        order_shipping.service_code            = cart_item&.data.try(:[], 'shipping').try(:[], 'service')
         order_shipping.service_name            = order_shipping.service_code
-        order_shipping.shipping_speed          = cart_item.data.try(:[], 'shipping_speed')
+        order_shipping.shipping_speed          = cart_item&.data.try(:[], 'shipping_speed')
         order_shipping.shipping_fee            = order_items.map(&:shipping_fee)&.sum&.to_f
         order_shipping.status                  = order_item.status
 
