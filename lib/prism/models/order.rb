@@ -120,21 +120,8 @@ module Prism
     def ensure_order_shippings
       return order_shippings if order_shippings.present? && order_shippings.map(&:order_shipping_items).flatten.present?
 
-      order_item = order_items.first
-      order_shipping = order_shippings.new
-      order_shipping.courier = order_item.cart_item.data.try(:[], 'shipping').try(:[], 'courier')
-      order_shipping.service_code = order_item.cart_item.data.try(:[], 'shipping').try(:[], 'service')
-      order_shipping.service_name = order_shipping.service_code
-      order_shipping.shipping_speed = order_item.cart_item.data.try(:[], 'shipping_speed')
-      order_shipping.shipping_fee = order_items.map(&:shipping_fee)&.sum&.to_f
-      order_shipping.status = 'delivered'
-      order_shipping.organization_address_id = order_item.shipping_address_id
-
-      order_items.map do |order_item|
-        order_shipping.order_shipping_items.build order_item_id: order_item.id
-      end
-
-      [order_shipping]
+      Prism::EnsureOrderShippingOfficer.new(self).perform
+      order_shippings.reload
     end
   end
 end
