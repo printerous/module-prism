@@ -68,11 +68,11 @@ module Prism
         (6371 *
           ACOS(
             COS(RADIANS(#{latitude})) *
-            COS(RADIANS(latitude)) *
-              COS(RADIANS(longitude) - RADIANS(#{longitude})
+            COS(RADIANS(districts.latitude)) *
+              COS(RADIANS(districts.longitude) - RADIANS(#{longitude})
             ) +
             SIN(RADIANS(#{latitude})) *
-            SIN(RADIANS(latitude))
+            SIN(RADIANS(districts.latitude))
           )
         ) AS distance
       SQL
