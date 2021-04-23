@@ -61,7 +61,7 @@ module Prism
 
     def self.search(params = {})
       params = {} if params.blank?
-      
+
       column_selection(params[:latitude], params[:longitude])
         .by_city(params[:query])
         .by_province_id(params[:province_id])
@@ -80,11 +80,11 @@ module Prism
         (6371 *
           ACOS(
             COS(RADIANS(#{latitude})) *
-            COS(RADIANS(latitude)) *
-              COS(RADIANS(longitude) - RADIANS(#{longitude})
+            COS(RADIANS(cities.latitude)) *
+              COS(RADIANS(cities.longitude) - RADIANS(#{longitude})
             ) +
             SIN(RADIANS(#{latitude})) *
-            SIN(RADIANS(latitude))
+            SIN(RADIANS(cities.latitude))
           )
         ) AS distance
       SQL

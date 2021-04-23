@@ -41,6 +41,7 @@ module Prism
       eager_load(:district, :city, :province)
         .where("organization_addresses.label % :query
           OR organization_addresses.street % :query
+          OR organization_addresses.label ILIKE :keyword
           OR organization_addresses.pic_email ILIKE :keyword
           OR organization_addresses.pic_name ILIKE :keyword
           OR organization_addresses.pic_phone ILIKE :keyword
