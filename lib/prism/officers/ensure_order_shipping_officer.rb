@@ -21,12 +21,13 @@ module Prism
         order_shipping.service_name            = order_shipping.service_code
         order_shipping.shipping_speed          = cart_item.data.try(:[], 'shipping_speed')
         order_shipping.shipping_fee            = order_items.map(&:shipping_fee)&.sum&.to_f
-        order_shipping.status                  = 'delivered'
+        order_shipping.status                  = order_item.status
 
         order_items.map do |item|
           order_shipping.order_shipping_items.new(
             order_item_id: item.id,
-            product_id: item.product_id
+            product_id: item.product_id,
+            weight: order_items.map{|item| item.data.try(:[], 'weight')&.to_f || 0 }&.sum&.to_f
           )
         end
 
