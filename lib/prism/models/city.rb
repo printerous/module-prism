@@ -54,7 +54,7 @@ module Prism
     }
 
     scope :column_selection, lambda { |latitude, longitude|
-      return select("#{Prism::City.table_name}.*") if latitude.blank? || longitude.blank?
+      return select("#{Prism::City.table_name}.*") if [latitude, longitude].any?(&:blank?)
 
       select("#{Prism::City.table_name}.*, #{distance_selector(latitude, longitude)}").order('distance asc')
     }
@@ -63,6 +63,7 @@ module Prism
       params = {} if params.blank?
 
       column_selection(params[:latitude], params[:longitude])
+        .by_query(params[:query])
         .by_city(params[:query])
         .by_province_id(params[:province_id])
         .by_id(params[:id])
