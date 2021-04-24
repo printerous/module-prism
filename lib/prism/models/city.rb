@@ -28,7 +28,8 @@ module Prism
       return where(nil) if query.blank?
 
       query = ActiveRecord::Base.connection.quote_string(query.strip)
-      where("cities.name % :query", query: query, code: "%#{query}%")
+      where('similarity(cities.name, :query) >= 0.1
+        OR cities.name % :query', query: query)
         .order(Arel.sql("similarity(cities.name, '#{query}') DESC"))
     }
 
@@ -36,15 +37,13 @@ module Prism
       return where(nil) if query.blank?
 
       where('provinces.name ILIKE :query OR provinces.abbr ILIKE :query
-        cities.name ILIKE :query OR cities.abbr ILIKE :query',
-        query: "%#{query}%"
-      )
+        cities.name ILIKE :query OR cities.abbr ILIKE :query', query: "%#{query}%")
     }
 
     scope :by_id, lambda { |id|
       return where(nil) if id.blank?
 
-      where("cities.id = ?", id)
+      where('cities.id = ?', id)
     }
 
     scope :by_province_id, lambda { |province_id|
@@ -53,16 +52,16 @@ module Prism
       where(province_id: province_id)
     }
 
-    scope :column_selection, lambda { |latitude, longitude|
-      return select("#{Prism::City.table_name}.*") if [latitude, longitude].any?(&:blank?)
+    scope :by_pinpoint, lambda { |latitude, longitude|
+      return select("#{table_name}.*") if [latitude, longitude].any?(&:blank?)
 
-      select("#{Prism::City.table_name}.*, #{distance_selector(latitude, longitude)}").order('distance asc')
+      select("#{table_name}.*, #{distance_selector(latitude, longitude)}").order('distance asc')
     }
 
     def self.search(params = {})
       params = {} if params.blank?
 
-      column_selection(params[:latitude], params[:longitude])
+      by_pinpoint(params[:latitude], params[:longitude])
         .by_query(params[:query])
         .by_city(params[:query])
         .by_province_id(params[:province_id])
@@ -74,10 +73,8 @@ module Prism
       "#{name}, #{provice_name}"
     end
 
-    private
-
     def self.distance_selector(latitude, longitude)
-      sql = <<~SQL
+      <<~SQL
         (6371 *
           ACOS(
             COS(RADIANS(#{latitude})) *
@@ -89,8 +86,6 @@ module Prism
           )
         ) AS distance
       SQL
-
-      sql
     end
   end
 end

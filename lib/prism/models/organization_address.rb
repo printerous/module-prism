@@ -38,8 +38,10 @@ module Prism
     scope :by_query, lambda { |query|
       return where(nil) if query.blank?
 
+      query = ActiveRecord::Base.connection.quote_string(query.strip)
       eager_load(:district, :city, :province)
-        .where("organization_addresses.label % :query
+        .where("similarity(organization_addresses.label, :query) >= 0.1
+          OR similarity(organization_addresses.street, :query) >= 0.1
           OR organization_addresses.street % :query
           OR organization_addresses.label ILIKE :keyword
           OR organization_addresses.pic_email ILIKE :keyword
@@ -57,14 +59,14 @@ module Prism
       return where(nil) if query.blank?
 
       eager_load(:city)
-        .where("cities.name ILIKE :query", query: "%#{query}%")
+        .where('cities.name ILIKE :query', query: "%#{query}%")
     }
 
     scope :by_district_name, lambda { |query|
       return where(nil) if query.blank?
 
       eager_load(:district)
-        .where("districts.name ILIKE :query", query: "%#{query}")
+        .where('districts.name ILIKE :query', query: "%#{query}")
     }
 
     scope :by_district_id, lambda { |district_id|

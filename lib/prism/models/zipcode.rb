@@ -24,9 +24,12 @@ module Prism
       return where(nil) if query.blank?
 
       query = ActiveRecord::Base.connection.quote_string(query.strip)
-      where("zipcodes.zipcode % :query OR zipcodes.sub_district_name % :query OR
-         zipcodes.district_name % :query OR zipcodes.city_name % :query OR
-         zipcodes.province_name % :query", query: query, code: "%#{query}%")
+      where("similarity(zipcodes.zipcode, :query) >= 0.1
+          OR similarity(zipcodes.sub_district_name, :query) >= 0.1
+          OR similarity(zipcodes.district_name, :query) >= 0.1
+          OR similarity(zipcodes.city_name, :query) >= 0.1
+          OR similarity(zipcodes.province_name, :query) >= 0.1
+          OR zipcodes.zipcode % :query", query: query)
         .order(Arel.sql("similarity(zipcodes.zipcode, '#{query}') DESC"))
         .order(Arel.sql("similarity(zipcodes.sub_district_name, '#{query}') DESC"))
         .order(Arel.sql("similarity(zipcodes.district_name, '#{query}') DESC"))

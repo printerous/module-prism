@@ -24,14 +24,14 @@ module Prism
       return where(nil) if query.blank?
 
       query = ActiveRecord::Base.connection.quote_string(query.strip)
-      where("provinces.name % :query", query: query, code: "%#{query}%")
+      where('similarity(provinces.name, :query) >= 0.1 OR provinces.name % :query', query: query)
         .order(Arel.sql("similarity(provinces.name, '#{query}') DESC"))
     }
 
     scope :by_id, lambda { |id|
       return where(nil) if id.blank?
 
-      where("provinces.id = ?", id)
+      where('provinces.id = ?', id)
     }
 
     def self.search(params = {})

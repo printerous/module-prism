@@ -25,9 +25,13 @@ module Prism
 
       query = ActiveRecord::Base.connection.quote_string(query.strip)
       joins(:city)
-        .where("districts.name % :query OR REGEXP_REPLACE(districts.code, '\s', '', 'g') ILIKE :code OR cities.name % :query", query: query, code: "%#{query}%")
-        .order(Arel.sql("similarity(cities.name, '#{query}') DESC"))
+        .where("similarity(districts.name, :query) >= 0.1
+          OR similarity(cities.name, :query) >= 0.1
+          OR districts.name % :query
+          OR cities.name % :query
+          OR REGEXP_REPLACE(districts.code, '\s', '', 'g') ILIKE :code", query: query, code: "%#{query}%")
         .order(Arel.sql("similarity(districts.name, '#{query}') DESC"))
+        .order(Arel.sql("similarity(cities.name, '#{query}') DESC"))
     }
 
     scope :by_city_id, lambda { |city_id|
@@ -42,16 +46,16 @@ module Prism
       where("districts.id = ?", id)
     }
 
-    scope :column_selection, lambda { |latitude, longitude|
-      return select("#{Prism::District.table_name}.*") if [latitude, longitude].any?(&:blank?)
+    scope :by_pinpoint, lambda { |latitude, longitude|
+      return select("#{table_name}.*") if [latitude, longitude].any?(&:blank?)
 
-      select("#{Prism::District.table_name}.*, #{distance_selector(latitude, longitude)}").order('distance asc')
+      select("#{table_name}.*, #{distance_selector(latitude, longitude)}").order('distance asc')
     }
 
     def self.search(params = {})
       params = {} if params.blank?
 
-      column_selection(params[:latitude], params[:longitude])
+      by_pinpoint(params[:latitude], params[:longitude])
         .by_query(params[:query])
         .by_city_id(params[:city_id])
         .by_id(params[:id])
@@ -61,10 +65,8 @@ module Prism
       by_query('Kebon Jeruk').first
     end
 
-    private
-
     def self.distance_selector(latitude, longitude)
-      sql = <<~SQL
+      <<~SQL
         (6371 *
           ACOS(
             COS(RADIANS(#{latitude})) *
@@ -76,8 +78,6 @@ module Prism
           )
         ) AS distance
       SQL
-
-      sql
     end
   end
 end
