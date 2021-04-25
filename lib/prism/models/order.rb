@@ -47,7 +47,13 @@ module Prism
     has_many :order_shippings, dependent: :destroy
     has_many :product_types, through: :order_items
 
-    has_many :order_terms
+    has_many :order_terms, dependent: :destroy
+
+    has_many :cart_payments, class_name: 'Stark::CartPayment', foreign_key: :order_reference, primary_key: :number # All cart_payments include cancelled
+    has_one  :cart_payment, -> { not_cancelled.order(id: :desc) }, class_name: 'Stark::CartPayment', foreign_key: :order_reference, primary_key: :number # Latest not_cancelled cart_payment
+
+    has_one :order_reference, class_name: 'Stark::CartPayment', foreign_key: :order_reference, primary_key: :number
+    has_one :cart, through: :order_reference, class_name: 'Stark::Cart'
 
     enum tax_policy:     %i[notax tax_inclusive tax_exclusive]
     enum status:         %i[draft submitted completed cancelled]
@@ -97,10 +103,6 @@ module Prism
       with_deleted.find_by(number: number) ? generate_number(code) : number
     end
 
-    def cart_payment
-      Stark::CartPayment.not_cancelled.order(id: :desc).find_by(order_reference: number)
-    end
-
     def paid?
       payment_status == 'paid'
     end
@@ -110,11 +112,8 @@ module Prism
     end
 
     def invoice
+      # TODO: this method need revisit
       Prism::InvoiceMain.by_integration('Prism::Order', id)
-    end
-
-    def cart
-      cart_payment&.cart
     end
 
     def total_discount
