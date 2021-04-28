@@ -54,6 +54,25 @@ module Prism
     include ActionView::Helpers::NumberHelper
     acts_as_paranoid
 
+    MONITOR_STATUS = {
+      drft: 'Draft',
+      dsgn: 'Need Layouter Design (DSGN)',
+      fnce: 'Need Finance Approval (FNCE)',
+      drej: 'Design Rejected (DREJ)',
+      crpo: 'Need Create PO (CRPO)',
+      papr: 'Need Partner Approval (PAPR)',
+      onpr: 'On Production by Partner (ONPR)',
+      pasn: 'Item sent to PRTS (PASN)',
+      rcvd: 'Received by PRTS (RCVD)',
+      neqc: 'Need QC (NEQC)',
+      qcok: 'QC Passed. Need Packing (QCOK)',
+      pckd: 'Packed. Need to Deliver (PCKD)',
+      ship: 'Undershipment (SHIP)',
+      arvd: 'Arrived (ARVD)',
+      cplt: 'Completed (CPLT)',
+      canc: 'Cancelled (CANC)'
+    }.with_indifferent_access
+
     belongs_to :order, -> { with_deleted }
     belongs_to :product_type, -> { with_deleted }
     belongs_to :product, class_name: 'Cuanki::Product', optional: true
