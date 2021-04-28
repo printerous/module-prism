@@ -102,6 +102,12 @@ module Prism
     has_one :invoice, through: :invoice_item
     has_one :invoice_main, class_name: 'InvoiceMain', through: :invoice_item
 
+    has_many :order_item_prices
+    has_one  :waiting_order_item_price, -> { where(status: :waiting).where('partner_id IS NOT NULL').order(created_at: :desc) }, class_name: 'Prism::OrderItemPrice'
+
+    has_one :order_reference_proof, -> { where(reference_type: :proof).order(id: :desc) }, class_name: 'Prism::OrderReference', foreign_key: :order_mass_id
+    has_one :order_item_proof, through: :order_reference_proof, source: :order_proof
+
     enum tax_policy:  %i[notax tax_inclusive tax_exclusive]
     enum status:      %i[draft submitted completed cancelled]
 
@@ -177,6 +183,95 @@ module Prism
 
     def shipping_speed
       order_shipping_item.order_shipping.shipping_speed
+    end
+
+    def partner_deadline
+      @partner_deadline ||= begin
+        working_day = waiting_order_item_price.present? ? waiting_order_item_price.working_day.day : 0.day
+        DateTime.now.change(hour: 15, min: 0, sec: 0) + working_day
+      end
+    end
+
+    def cuanki_product
+      Cuanki::Product.find(product_id)
+    end
+
+    def vas?
+      return false if product_id.blank?
+
+      cuanki_product_type = if cuanki_product_type_id.blank?
+                              cuanki_product.product_type
+                            else
+                              Cuanki::ProductType.find(cuanki_product_type_id)
+                            end
+
+      return false if cuanki_product_type.blank?
+
+      cuanki_product_type.flag == 'vas'
+    end
+
+    def bundling_b2c?
+      flag.present? && flag.downcase.casecmp?('bundling-b2c')
+    end
+
+    def bundle?
+      flag.present? && flag.downcase.casecmp?('bundle')
+    end
+
+    def nationwide?
+      flag.present? && flag.downcase.casecmp?('nationwide')
+    end
+
+    def moments_web?
+      order.type == 'OrderMoment' && %w[mobile desktop].include?(device_source)
+    end
+
+    def moments_apps?
+      order.type == 'OrderMoment' && device_source == 'apps'
+    end
+
+    def panorama?
+      order.type == 'OrderApiConnect' && order.source == 'external-panorama'
+    end
+
+    def pro_account?
+      order.type == 'OrderProAccount'
+    end
+
+    def sweet_escape?
+      order&.type == 'OrderApiConnect' && order.source == 'external-sweetescape'
+    end
+
+    def offline_sales?
+      order.type == 'OrderOfflineSales'
+    end
+
+    def tokopedia?
+      order&.type == 'OrderApiConnect' && order&.source == 'external-tokopedia'
+    end
+
+    def website_desktop?
+      order.type == 'OrderWebsite' && (device_source == 'desktop' || device_source.nil?)
+    end
+
+    def website_mobile?
+      order.type == 'OrderWebsite' && device_source == 'mobile'
+    end
+
+    def internal_use?
+      order.category == 'internal-use' || order.category == 'internal_use'
+    end
+
+    def reprint?
+      order.category == 'reprint'
+    end
+
+    def sample?
+      order.category == 'sample'
+    end
+
+    def inventory?
+      order.category == 'inventory'
     end
   end
 end
