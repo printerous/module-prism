@@ -273,5 +273,9 @@ module Prism
     def inventory?
       order.category == 'inventory'
     end
+
+    def monitoring_statuses
+      [data['monitoring_status']]&.flatten&.compact
+    end
   end
 end
