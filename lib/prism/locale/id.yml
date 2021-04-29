@@ -19,3 +19,7 @@ id:
       waiting_payment_sub_log: ''
       no_log: "Tidak ada data yang bisa di tampilkan."
       no_sub_log: "Menunggu update data."
+  payment_status:
+    paid: 'Pembayaran Diterima'
+    unpaid: 'Menunggu Pembayaran'
+    expired: 'Expired'

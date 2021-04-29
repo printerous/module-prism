@@ -126,5 +126,13 @@ module Prism
       Prism::EnsureOrderShippingOfficer.new(self).perform
       order_shippings.reload
     end
+
+    def user_payment_status
+      locale    = I18n.locale.to_s
+
+      file_path = File.join(File.dirname(__dir__), "/locale/#{locale}.yml")
+      yml = YAML.safe_load(File.read(file_path)).with_indifferent_access
+      yml[locale]['payment_status'][payment_status]
+    end
   end
 end

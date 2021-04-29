@@ -19,3 +19,7 @@ en:
         waiting_payment_sub_log: 'Waiting for payment confirmation.'
         no_log: "No history can be displayed."
         no_sub_log: "Waiting for data updates."
+  payment_status:
+    paid: 'Payment Received'
+    unpaid: 'Waiting for payment'
+    expired: 'Expired'
