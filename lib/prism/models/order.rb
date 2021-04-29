@@ -32,6 +32,7 @@
 
 module Prism
   class Order < PrismModel
+    include Hashid::Rails if "Hashid::Rails".safe_constantize.present?
     acts_as_paranoid
 
     belongs_to :user, -> { with_deleted }
@@ -133,6 +134,10 @@ module Prism
       file_path = File.join(File.dirname(__dir__), "/locale/#{locale}.yml")
       yml = YAML.safe_load(File.read(file_path)).with_indifferent_access
       yml[locale]['payment_status'][payment_status]
+    end
+
+    def feedback_url
+      "#{ENV.fetch('FEEDBACK_SERVICE_URL', 'https://feedback.printerous.com')}/#{hashid}?utm_source=website&utm_medium=button&clicked=true"
     end
   end
 end
