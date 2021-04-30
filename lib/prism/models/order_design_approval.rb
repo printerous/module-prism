@@ -24,5 +24,6 @@
 
 module Prism
   class OrderDesignApproval < OrderApproval
+    acts_as_paranoid
   end
 end
