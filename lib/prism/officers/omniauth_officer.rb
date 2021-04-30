@@ -17,14 +17,12 @@ module Prism
 
       # Register
       if user.blank? && social_account.new_record?
-        officer = Prism::CustomerRegistrationOfficer.new(registration_params.merge(confirmed_at: Time.now))
-        officer.perform
-        @user = officer.user
-        @new_registered = true
+        register_user
       end
 
       if social_account.persisted?
-        @user = social_account.user
+        @user = social_account.user unless social_account.user.blank?
+        register_user if social_account.user.blank?
       end
 
       social_account.user_id   = @user.id # Reconnect
@@ -59,6 +57,14 @@ module Prism
       unless ['google_oauth2', 'facebook'].include?(params[:provider])
         @errors << 'Provider are not supported'
       end
+    end
+
+    def register_user
+      officer = Prism::CustomerRegistrationOfficer.new(registration_params.merge(confirmed_at: Time.now))
+      officer.perform
+      @user = officer.user
+      @user.save!
+      @new_registered = true
     end
 
     def registration_params
