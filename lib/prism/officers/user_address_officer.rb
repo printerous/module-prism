@@ -15,7 +15,7 @@ module Prism
         user_address.pic_email   = params[:pic_email]&.strip if params[:pic_email].present?
         user_address.street      = params[:street]&.strip if params[:street].present?
         user_address.district_id = params[:district_id] if params[:district_id].present?
-        user_address.zip_code    = params[:zip_code]&.strip if params[:zip_code].present?
+        user_address.zip_code    = params[:zip_code]&.to_s&.strip if params[:zip_code].present?
         user_address.latitude    = params[:latitude] if params[:latitude].present?
         user_address.longitude   = params[:longitude] if params[:longitude].present?
 
