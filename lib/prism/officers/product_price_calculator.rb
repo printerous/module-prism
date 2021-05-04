@@ -72,7 +72,7 @@ module Prism
 
       cr.spec        = calculator.spec
       cr.price       = result[:price]
-      cr.working_day = hour_to_day(result[:hours])
+      cr.working_day = hour_to_day(result[:hours] || 1)
       cr.data        = result
       cr.save!
 
