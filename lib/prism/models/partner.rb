@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: partners
@@ -74,10 +76,6 @@ module Prism
       where(status: :active)
     }
 
-    def self.options
-      all.collect { |p| [p.name, p.id] }
-    end
-
     scope :by_name, lambda { |name|
       return where(nil) if name.blank?
 
@@ -86,5 +84,22 @@ module Prism
         name: "%#{name}%"
       )
     }
+
+    def self.options
+      all.collect { |p| [p.name, p.id] }
+    end
+
+    def lebaran_additional_day
+      lebaran_close_date = properties['close_date']
+      lebaran_open_date  = properties['open_date']
+
+      return 0 if lebaran_close_date.blank? || lebaran_open_date.blank?
+
+      return 0 if Time.now < lebaran_close_date || Time.now > lebaran_open_date
+
+      partner_additional = (Date.parse(lebaran_open_date) - Date.today).to_i
+
+      partner_additional
+    end
   end
 end
