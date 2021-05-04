@@ -24,17 +24,7 @@ module Prism
       return where(nil) if query.blank?
 
       query = ActiveRecord::Base.connection.quote_string(query.strip)
-      where("similarity(zipcodes.zipcode, :query) >= 0.1
-          OR similarity(zipcodes.sub_district_name, :query) >= 0.1
-          OR similarity(zipcodes.district_name, :query) >= 0.1
-          OR similarity(zipcodes.city_name, :query) >= 0.1
-          OR similarity(zipcodes.province_name, :query) >= 0.1
-          OR zipcodes.zipcode % :query", query: query)
-        .order(Arel.sql("similarity(zipcodes.zipcode, '#{query}') DESC"))
-        .order(Arel.sql("similarity(zipcodes.sub_district_name, '#{query}') DESC"))
-        .order(Arel.sql("similarity(zipcodes.district_name, '#{query}') DESC"))
-        .order(Arel.sql("similarity(zipcodes.city_name, '#{query}') DESC"))
-        .order(Arel.sql("similarity(zipcodes.province_name, '#{query}') DESC"))
+      where('zipcodes.zipcode ILIKE :query', query: "%#{query}%")
     }
 
     scope :by_city, lambda { |city_id|
