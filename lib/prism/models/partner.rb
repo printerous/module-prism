@@ -95,9 +95,13 @@ module Prism
 
       return 0 if lebaran_close_date.blank? || lebaran_open_date.blank?
 
-      return 0 if Time.now < lebaran_close_date || Time.now > lebaran_open_date
+      return 0 if Time.now > lebaran_open_date
 
       partner_additional = (Date.parse(lebaran_open_date) - Date.today).to_i
+
+      if Time.now < lebaran_close_date
+        partner_additional = (Date.parse(lebaran_open_date) - Date.parse(lebaran_close_date)).to_i
+      end
 
       partner_additional
     end
