@@ -89,18 +89,29 @@ module Prism
       all.collect { |p| [p.name, p.id] }
     end
 
-    def lebaran_additional_day
+    def lebaran_additional_day(working_day = 1)
       lebaran_close_date = properties['close_date']
       lebaran_open_date  = properties['open_date']
 
+      # kalau ndak ada datanya, tidak usah ditambah
       return 0 if lebaran_close_date.blank? || lebaran_open_date.blank?
 
+      # kalau udah lewat, gak usah ditambah juga
       return 0 if Time.now > lebaran_open_date
 
-      partner_additional = (Date.parse(lebaran_open_date) - Date.today).to_i
+      # default value
+      partner_additional = 0
 
+      # kalau belum libur
       if Time.now < lebaran_close_date
-        partner_additional = (Date.parse(lebaran_open_date) - Date.parse(lebaran_close_date)).to_i
+        # cek apakah working day bisa sebelum libur
+        deadline = Time.now + working_day.days
+        if deadline >= lebaran_close_date
+          partner_additional = (Date.parse(lebaran_open_date) - Date.parse(lebaran_close_date)).to_i
+        end
+      else
+        # kalau udah waktu libur
+        partner_additional = (Date.parse(lebaran_open_date) - Date.today).to_i
       end
 
       partner_additional
