@@ -61,8 +61,10 @@ module Prism
     has_many :user_billing_addresses, -> { where("organization_addresses.types ? 'billing' AND organization_addresses.types ->> 'billing' = '1'") },
                                       through: :personal, source: :organization_addresses
 
-    has_many :people, dependent: :destroy
-    has_many :companies, through: :person, source: :companies
+    has_many :person_accounts, dependent: :destroy
+    has_many :people, through: :person_accounts
+    has_many :organization_members, through: :people
+    has_many :companies, through: :organization_members
     has_many :organization_addresses, through: :companies, source: :organization_addresses
 
     has_many  :user_messaging_integrations, dependent: :destroy
