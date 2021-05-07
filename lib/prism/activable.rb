@@ -52,6 +52,16 @@ module Stark
       activate!
     end
 
+    def ensure_activation
+      self.inactive_at = nil
+      self.active_at = Time.zone.now
+    end
+
+    def ensure_inactivation
+      self.active_at = nil
+      self.inactive_at = Time.zone.now
+    end
+
     def active?
       now = Time.zone.now
       active_at.present? && active_at <= now && (inactive_at.blank? || inactive_at > now)
