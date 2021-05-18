@@ -58,7 +58,7 @@ module Prism
 
     enum tax_policy:     %i[notax tax_inclusive tax_exclusive]
     enum status:         %i[draft submitted completed cancelled]
-    enum payment_status: %i[unpaid partial paid]
+    enum payment_status: %i[unpaid partial paid expired cancelled]
 
     scope :by_query, lambda { |query|
       return where(nil) if query.blank?
