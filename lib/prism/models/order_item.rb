@@ -182,6 +182,8 @@ module Prism
     end
 
     def shipping_speed
+      return parent.shipping_speed if order_shipping_item.blank?
+
       order_shipping_item.order_shipping.shipping_speed
     end
 

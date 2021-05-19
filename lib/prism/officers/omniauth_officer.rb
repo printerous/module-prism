@@ -7,7 +7,7 @@ module Prism
     # - data from omniauth (uid, provider, name, email, etc)
     def initialize(params)
       @params         = params
-      @user           = Prism::User.find_by(id: params[:user_id])
+      @user           = Prism::User.find_by(uid: params[:uid])
       @errors         = []
       @new_registered = false
     end
