@@ -4,6 +4,7 @@ module Prism
   class PrismModel < ActiveRecord::Base
     establish_connection(
       adapter: :postgresql,
+      pool: ENV.fetch('RAILS_MAX_THREADS', 5),
       host: ENV['PRISM_DBHOST'],
       port: ENV['PRISM_DBPORT'],
       username: ENV['PRISM_DBUSER'],
