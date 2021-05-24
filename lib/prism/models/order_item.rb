@@ -279,5 +279,10 @@ module Prism
     def monitoring_statuses
       [data['monitoring_status']]&.flatten&.compact
     end
+
+    def translated_unit
+      unit_type = quantity > 1 ? 'plural' : 'singular'
+      I18n.t("unit.#{unit_type}.#{unit}")
+    end
   end
 end
