@@ -282,7 +282,7 @@ module Prism
 
     def translated_unit
       unit_type = quantity.to_i > 1 ? 'plural' : 'singular'
-      I18n.t("unit.#{unit_type}.#{unit}")
+      I18n.t("unit.#{unit_type}.#{unit.downcase}")
     end
   end
 end
