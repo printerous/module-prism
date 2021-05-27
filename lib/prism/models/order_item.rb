@@ -141,7 +141,7 @@ module Prism
 
     def generate_label!
       formatted_qty = number_with_precision(quantity, delimiter: '.', separator: ',', precision: 0)
-      data['quantity_label'] = [formatted_qty, unit].join(' ')
+      data['quantity_label'] = [formatted_qty, translated_unit].join(' ')
       data['quantity_label'] = [formatted_qty, combined_diffs].join(' x ') if combined?
 
       update_columns data: data
