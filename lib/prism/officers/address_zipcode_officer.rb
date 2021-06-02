@@ -10,7 +10,7 @@ module Prism
 
     def perform
       district = address.district
-      return if district.blank?
+      return if district.blank? || address.zip_code.blank?
 
       zipcode.zipcode       = address.zip_code&.strip
       zipcode.city_id       = district.city_id
