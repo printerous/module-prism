@@ -39,7 +39,8 @@
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
 #  unconfirmed_email      :string
-#
+#  ces_key                :datetime
+#  nps_key                :datetime
 
 module Prism
   class User < PrismModel
@@ -73,6 +74,9 @@ module Prism
     has_many  :social_accounts, dependent: :destroy
     has_many  :orders, foreign_key: :user_id
     has_many  :website_orders, -> { where(type: 'OrderWebsite') }, class_name: 'Prism::Order', foreign_key: :user_id
+
+    has_one  :feedback_ces, -> { order(updated_at: :desc) }, class_name: 'Stark::FeedbacksCes'
+    has_one  :feedback_nps, -> { order(updated_at: :desc) }, class_name: 'Stark::FeedbacksNps'
 
     # Stark Module Dependencies
     has_many :user_carts, class_name: 'Stark::Cart', dependent: :destroy
