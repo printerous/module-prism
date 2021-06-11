@@ -6,7 +6,8 @@ module Prism
       digital_calculator: Prism::Calculator::DigitalCalculator,
       digital_eco_calculator: Prism::Calculator::DigitalEcoCalculator,
       offset_calculator: Prism::Calculator::OffsetCalculator,
-      large_format_calculator: Prism::Calculator::LargeFormatCalculator
+      large_format_calculator: Prism::Calculator::LargeFormatCalculator,
+      corrugated_calculator: Prism::Calculator::CorrugatedCalculator
     }.with_indifferent_access
 
     attr_reader :product, :product_type, :partner_ids, :partners, :options
