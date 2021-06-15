@@ -105,7 +105,7 @@ module Prism
     end
 
     def hour_to_day(hour, office_hour = 8)
-      return 0 if hour <= 6
+      return 0 if hour <= 6 || hour.infinite?
 
       (hour / office_hour.to_f).ceil
     end

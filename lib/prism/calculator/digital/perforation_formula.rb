@@ -1,7 +1,8 @@
 module Prism
   class Calculator::Digital::PerforationFormula < Prism::Calculator::Digital::PostPressFormula
     def price
-      @price ||= ratecard.price_minimum + (additional_quantity * tier.price)
+      price_minimum = ratecard.price_minimum || 0
+      @price ||= price_minimum + (additional_quantity * tier.price)
     end
 
     def quantity_minimum
