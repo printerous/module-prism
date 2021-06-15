@@ -11,7 +11,7 @@ module Prism
     }.with_indifferent_access
 
     attr_reader :product, :product_type, :partner_ids, :partners, :options
-    attr_reader :results
+    attr_reader :results, :errors
 
     # options:
     # - minimum_quantity
