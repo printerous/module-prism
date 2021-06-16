@@ -74,11 +74,11 @@ module Prism
 
           @total = 0
           @breakdowns.each do |breakdown|
-            formula_klass = breakdown.formula.constantize
+            formula_klass = breakdown.module_formula.constantize
             formula       = formula_klass.new(breakdown: breakdown, product: self, partner: partner, machine: machine, paper: paper)
             value         = formula.calculate
 
-            Rails.logger.info "---------------------- #{breakdown.formula} : #{ partner.name }------------------"
+            Rails.logger.info "---------------------- #{breakdown.module_formula} : #{ partner.name }------------------"
             Rails.logger.info "-------------------------- #{value} --------------------------"
 
             if value == -1
