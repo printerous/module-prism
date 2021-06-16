@@ -22,7 +22,7 @@ module Prism
     end
 
     def material_tier
-      material_ratecard.tiers.last
+      material_ratecard.tiers.by_quantity(@product.quantity) || material_ratecard.tiers.last
     end
 
     def material_price
