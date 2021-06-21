@@ -53,11 +53,15 @@ module Stark
     end
 
     def ensure_activation
+      return active_at if active?
+
       self.inactive_at = nil
       self.active_at = Time.zone.now
     end
 
     def ensure_inactivation
+      return inactive_at if inactive?
+
       self.active_at = nil
       self.inactive_at = Time.zone.now
     end
