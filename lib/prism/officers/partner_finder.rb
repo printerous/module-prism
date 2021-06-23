@@ -59,11 +59,11 @@ module Prism
     end
 
     def latitude
-      options[:latitude]
+      options[:latitude].to_s.slice(0, 16)
     end
 
     def longitude
-      options[:longitude]
+      options[:longitude].to_s.slice(0, 16)
     end
 
     def finder_sql

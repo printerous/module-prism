@@ -74,14 +74,17 @@ module Prism
     end
 
     def self.distance_selector(latitude, longitude)
+      lat  = latitude.to_s.slice(0, 16)
+      long = longitude.to_s.slice(0, 16)
+
       <<~SQL
         (6371 *
           ACOS(
-            COS(RADIANS(#{latitude})) *
+            COS(RADIANS(#{lat})) *
             COS(RADIANS(cities.latitude)) *
-              COS(RADIANS(cities.longitude) - RADIANS(#{longitude})
+              COS(RADIANS(cities.longitude) - RADIANS(#{long})
             ) +
-            SIN(RADIANS(#{latitude})) *
+            SIN(RADIANS(#{lat})) *
             SIN(RADIANS(cities.latitude))
           )
         ) AS distance
