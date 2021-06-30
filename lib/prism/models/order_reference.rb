@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: order_references
+#
+#  id              :bigint(8)        not null, primary key
+#  reference_type  :string
+#  order_mass_id   :bigint(8)
+#  order_proof_id  :bigint(8)
+#  proof_type      :string
+#  approval_type   :string
+#  color_tolerance :boolean
+#  deleted_at      :datetime
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  is_main         :boolean          default(FALSE)
+#
+
 module Prism
   class OrderReference < PrismModel
     REFERENCE_TYPE = %w[proof mass reorder reprint].freeze

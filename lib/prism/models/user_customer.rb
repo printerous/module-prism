@@ -37,6 +37,8 @@
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
 #  unconfirmed_email      :string
+#  ces_key                :datetime
+#  nps_key                :datetime
 #
 
 module Prism

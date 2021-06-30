@@ -2,8 +2,8 @@
 #
 # Table name: order_website_timelines
 #
-#  id            :bigint           not null, primary key
-#  order_item_id :bigint
+#  id            :bigint(8)        not null, primary key
+#  order_item_id :bigint(8)
 #  status        :string
 #  title         :string
 #  description   :string

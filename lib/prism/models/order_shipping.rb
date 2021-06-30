@@ -2,8 +2,8 @@
 #
 # Table name: order_shippings
 #
-#  id                           :bigint           not null, primary key
-#  order_id                     :bigint
+#  id                           :bigint(8)        not null, primary key
+#  order_id                     :bigint(8)
 #  courier                      :string
 #  shipping_speed               :integer
 #  booking_code                 :string
@@ -15,12 +15,12 @@
 #  order_shipping_base_id       :integer
 #  shipping_fee                 :integer          default(0)
 #  service_name                 :string
-#  logistic_shipping_courier_id :bigint
+#  logistic_shipping_courier_id :bigint(8)
 #  service_code                 :string
 #  shipping_quotation_id        :integer
-#  organization_address_id      :bigint
+#  organization_address_id      :bigint(8)
 #  deleted_at                   :datetime
-#  partner_id                   :bigint
+#  partner_id                   :bigint(8)
 #
 
 module Prism

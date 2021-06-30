@@ -1,11 +1,10 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: partner_products
 #
-#  id                 :bigint           not null, primary key
-#  partner_variant_id :bigint
+#  id                 :bigint(8)        not null, primary key
+#  partner_variant_id :bigint(8)
 #  product_id         :integer
 #  spec_ids           :jsonb
 #  deleted_at         :datetime

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: order_items
@@ -47,6 +46,8 @@
 #  cuanki_product_type_id :integer
 #  pic_id                 :integer
 #  pic_support_id         :integer
+#  shipping_discount      :decimal(12, 2)   default(0.0)
+#  parent_id              :integer
 #
 
 module Prism

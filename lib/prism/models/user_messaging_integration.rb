@@ -1,10 +1,9 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: user_messaging_integrations
 #
-#  id             :bigint           not null, primary key
+#  id             :bigint(8)        not null, primary key
 #  user_id        :integer
 #  messaging_type :string
 #  messaging_id   :string

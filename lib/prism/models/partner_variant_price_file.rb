@@ -1,19 +1,18 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: partner_variant_price_files
 #
-#  id                 :bigint           not null, primary key
-#  partner_variant_id :bigint
-#  user_id            :bigint
+#  id                 :bigint(8)        not null, primary key
+#  partner_variant_id :bigint(8)
+#  user_id            :bigint(8)
 #  file               :string
 #  active_at          :datetime
 #  inactive_at        :datetime
 #  deleted_at         :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  recommended        :boolean          default("false")
+#  recommended        :boolean          default(FALSE)
 #  expired_date       :datetime
 #  validity_period    :integer
 #  agreement_file     :string

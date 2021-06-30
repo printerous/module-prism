@@ -2,9 +2,9 @@
 #
 # Table name: product_type_spec_sets
 #
-#  id              :bigint           not null, primary key
-#  product_type_id :bigint
-#  spec_set_id     :bigint
+#  id              :bigint(8)        not null, primary key
+#  product_type_id :bigint(8)
+#  spec_set_id     :bigint(8)
 #  application     :string           default("prism")
 #
 

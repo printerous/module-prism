@@ -3,7 +3,6 @@
 # Table name: zipcodes
 #
 #  id                :bigint(8)        not null, primary key
-#  district_id       :bigint(8)
 #  zipcode           :string
 #  sub_district_name :string
 #  district_name     :string
@@ -12,6 +11,8 @@
 #  deleted_at        :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  city_id           :bigint(8)
+#  city_type         :string
 #
 
 module Prism

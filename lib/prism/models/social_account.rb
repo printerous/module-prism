@@ -2,8 +2,8 @@
 #
 # Table name: social_accounts
 #
-#  id         :bigint           not null, primary key
-#  user_id    :bigint
+#  id         :bigint(8)        not null, primary key
+#  user_id    :bigint(8)
 #  uid        :string
 #  provider   :string
 #  connected  :boolean

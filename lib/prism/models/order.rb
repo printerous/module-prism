@@ -28,6 +28,7 @@
 #  category               :string           default("sales")
 #  po_number              :string
 #  sales_id               :integer
+#  shipping_discount      :decimal(12, 2)   default(0.0)
 #
 
 module Prism

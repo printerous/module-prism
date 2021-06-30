@@ -2,17 +2,17 @@
 #
 # Table name: spec_wizards
 #
-#  id            :bigint           not null, primary key
+#  id            :bigint(8)        not null, primary key
 #  key           :string
 #  deleted_at    :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  spec_value_id :bigint
-#  spec_set_id   :bigint
+#  spec_value_id :bigint(8)
+#  spec_set_id   :bigint(8)
 #  option_ids    :jsonb
 #  input_type    :string
 #  spec_key_id   :integer
-#  position      :integer          default("0")
+#  position      :integer          default(0)
 #  properties    :jsonb
 #
 

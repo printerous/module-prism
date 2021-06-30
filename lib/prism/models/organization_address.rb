@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: organization_addresses
@@ -20,6 +19,8 @@
 #  office_phone    :string
 #  integration     :jsonb
 #  data            :jsonb
+#  user_uniq_id    :string
+#  code            :string
 #
 
 module Prism

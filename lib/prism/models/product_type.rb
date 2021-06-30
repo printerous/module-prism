@@ -2,7 +2,7 @@
 #
 # Table name: product_types
 #
-#  id          :bigint           not null, primary key
+#  id          :bigint(8)        not null, primary key
 #  code        :string
 #  name        :string
 #  tags        :string
@@ -11,7 +11,7 @@
 #  updated_at  :datetime         not null
 #  active_at   :datetime
 #  inactive_at :datetime
-#  spec_set_id :bigint
+#  spec_set_id :bigint(8)
 #  integration :jsonb
 #
 

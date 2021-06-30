@@ -2,13 +2,13 @@
 #
 # Table name: order_website_statuses
 #
-#  id            :bigint           not null, primary key
+#  id            :bigint(8)        not null, primary key
 #  status        :string
 #  time          :datetime
 #  deleted_at    :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  order_item_id :bigint
+#  order_item_id :bigint(8)
 #  is_complete   :boolean          default(TRUE)
 #
 
