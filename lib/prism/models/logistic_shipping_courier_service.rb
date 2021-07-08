@@ -16,5 +16,7 @@
 module Prism
   class LogisticShippingCourierService < PrismModel
     acts_as_paranoid
+
+    belongs_to :logistic_shipping_courier
   end
 end
