@@ -29,6 +29,7 @@
 #  po_number              :string
 #  sales_id               :integer
 #  shipping_discount      :decimal(12, 2)   default(0.0)
+#  checkout_id            :string
 #
 
 module Prism
