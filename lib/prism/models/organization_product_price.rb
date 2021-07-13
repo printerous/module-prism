@@ -20,6 +20,8 @@
 #  project          :string
 #  quantity_min     :integer
 #  partner_id       :integer
+#  hub_code         :string
+#  procurement_id   :integer
 #
 
 module Prism

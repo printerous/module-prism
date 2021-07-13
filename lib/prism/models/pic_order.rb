@@ -12,6 +12,7 @@
 #  updated_at      :datetime         not null
 #  deleted_at      :datetime
 #  organization_id :integer
+#  procurement_id  :integer
 #
 
 module Prism
