@@ -3,7 +3,6 @@
 # Table name: organization_shipping_configs
 #
 #  id                                   :bigint(8)        not null, primary key
-#  organization_product_price_id        :bigint(8)
 #  source_address_type                  :string
 #  source_address_id                    :integer
 #  destination_address_type             :string
