@@ -2,33 +2,43 @@
 
 module Prism
   class OrderPicFinder
-    attr_reader :source, :organization_id, :sales_id, :options
+    attr_reader :source, :order_item, :options
     attr_reader :pic_id, :pic_support_id
 
-    def initialize(source, organization_id, sales_id, args = {})
-      @source          = source
-      @organization_id = organization_id
-      @sales_id        = sales_id
-      @options         = args&.to_h&.with_indifferent_access
-      @pic_id          = nil
-      @pic_support_id  = nil
+    def initialize(source, order_item, args = {})
+      @source     = source
+      @order_item = order_item
+      @options    = args&.to_h&.with_indifferent_access
     end
 
     def perform
-      # find by source
-      pics = Prism::PicOrder.where(source: source)
+      pics = PicOrder.where(source: source)
 
-      pics = pics.where(organization_id: organization_id) if pics.size > 1
+      pics = filtered_by('organization_id', pics)
+      pics = filtered_by('sales_id', pics)
+      pics = filtered_by('procurement_id', pics)
 
-      pics = pics.where(sales_id: sales_id) if pics.blank?
+      pics.last
+    end
 
-      if pics.blank?
-        pics = Prism::PicOrder.where(source: source)
-                              .where(organization_id: nil)
-                              .where(sales_id: nil)
-      end
+    private
 
-      pics.first
+    def organization_id
+      order_item.organization&.id
+    end
+
+    def sales_id
+      order_item.order.sales_id
+    end
+
+    def procurement_id
+      order_item.procurement_id
+    end
+
+    def filtered_by(method_name, pics)
+      return pics if pics.blank?
+
+      pics.select { |pic| pic.send(method_name) == send(method_name) || pic.send(method_name).blank? }
     end
   end
 end

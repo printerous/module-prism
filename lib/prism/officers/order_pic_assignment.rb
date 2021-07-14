@@ -38,7 +38,7 @@ module Prism
 
           next if source.blank?
 
-          pic_order = Prism::OrderPicFinder.new(source, organization_id, sales_id).perform
+          pic_order = Prism::OrderPicFinder.new(source, order_item).perform
 
           puts pic_order
 
