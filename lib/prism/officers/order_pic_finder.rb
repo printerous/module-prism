@@ -16,7 +16,7 @@ module Prism
 
       pics = filtered_by('organization_id', pics)
       pics = filtered_by('sales_id', pics)
-      pics = filtered_by('procurement_id', pics)
+      pics = filtered_by('procurement_id', pics) if order_item.has_attribute?('procurement_id')
 
       pics.last
     end
@@ -24,15 +24,15 @@ module Prism
     private
 
     def organization_id
-      order_item.organization&.id
+      order_item&.organization&.id
     end
 
     def sales_id
-      order_item.order.sales_id
+      order_item&.order&.sales_id
     end
 
     def procurement_id
-      order_item.procurement_id
+      order_item&.procurement_id
     end
 
     def filtered_by(method_name, pics)
