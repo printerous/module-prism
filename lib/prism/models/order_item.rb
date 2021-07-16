@@ -74,12 +74,13 @@ module Prism
       canc: 'Cancelled (CANC)'
     }.with_indifferent_access
 
-    has_one    :organization, through: :order
-    belongs_to :organization_asset, optional: true
 
     belongs_to :order, -> { with_deleted }
     belongs_to :product_type, -> { with_deleted }
     belongs_to :product, class_name: 'Cuanki::Product', optional: true
+
+    has_one    :organization, through: :order
+    belongs_to :organization_asset, optional: true
 
     belongs_to :parent, class_name: 'Prism::OrderItem', foreign_key: :parent_id
     has_many   :item_groups, class_name: 'Prism::OrderItem', foreign_key: :parent_id, dependent: :destroy
