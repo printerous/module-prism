@@ -10,6 +10,7 @@
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #  integrations                  :jsonb
+#  hub_code                      :string
 #
 
 module Prism
